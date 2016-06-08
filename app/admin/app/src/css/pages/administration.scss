@@ -1,0 +1,60 @@
+#administration {
+	header {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 300px;
+		background: url('../imgs/admin-bg.png') repeat;
+		
+		> div {
+			background: $light-black;
+			
+			.container {
+				padding: 10px 0;
+				
+				.project-name {
+					float: left;
+
+					h1 {
+						margin: 0;
+						color: $white;
+						text-transform: lowercase;
+						font-weight: 300;
+					}
+				}
+
+				.control-panel {
+					float: right;
+				}
+			}
+		}
+	}
+
+	main {
+    position: relative;
+		margin-top: 150px;
+    padding: 20px 15px;
+    background: $white;
+    z-index: 99;
+
+		> div[id*='admin-'] {
+			width: 100%;
+			margin-bottom: 1em;
+
+			input {
+				display: block;
+				width: 100%;
+
+				&[data-db-key='header'] {
+					background: transparent;
+				}
+			}
+		}
+	}
+}
+
+#admin-news {
+	.admin-news-icon {
+		width: 20px;
+	}
+}

@@ -1,0 +1,27 @@
+{
+  "name": "cestovni-denik.cz",
+  "version": "0.0.0",
+  "description": "cestovni-denik.cz website",
+  "main": "webpack.config.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.9.0",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-stage-0": "^6.3.13",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "node-sass": "^3.7.0",
+    "sass-loader": "^3.2.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --content-base ./ --inline --hot"
+  },
+  "author": "Martin Nikl",
+  "license": "MIT"
+}

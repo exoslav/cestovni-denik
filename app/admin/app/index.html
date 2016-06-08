@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Cestovní deník</title>
+  <meta name="description" content="Administrace">
+  <meta name="keywords" content="Administrace pro web cestovni-denik.cz">
+  <meta name="author" content="Martin Nikl">
+	<meta name="viewport" content="width=device-width">
+	
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700&nbsp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+	<link rel="stylesheet" href="/src/css/bootsrap.min.css">
+	<link rel="stylesheet" href="/dist/main.css">
+
+	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+	<script src="../dist/main.js"></script>
+	<script>
+	$(document).ready(function() {
+		let opts = {
+			fireBaseConfig: {
+			  apiKey: "AIzaSyDsPWGiRDJTMm354hXivpOS6Dx_1c0tOUE",
+			  authDomain: "cestovni-denik.firebaseapp.com",
+			  databaseURL: "https://cestovni-denik.firebaseio.com",
+			  storageBucket: "cestovni-denik.appspot.com",
+		  },
+		  customFunctions: {
+				postInitFunction: removePreloader
+		  }
+		}
+
+		function removePreloader() {
+			$('#preloader-overpage').hide().remove()
+		}
+
+		window.adminInit(opts)
+	})
+	</script>
+</head>
+
+	<body class="admin-login">
+	
+		<div id="preloader-overpage">
+			<div id="cssload-pgloading">
+				<div class="cssload-loadingwrap">
+					<ul class="cssload-bokeh">
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

@@ -1,0 +1,58 @@
+body, h1, h2, h3, h4, h5, h6, html, img, li, ol, p, table, ul {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+
+body {
+	font-family: 'Roboto', sans-serif;
+	@include fontSize(16px, 1.6rem);
+	color: $light-black;
+}
+
+p {
+	margin-bottom: 1em;
+	line-height: 120%;
+}
+
+a {
+	text-decoration: underline;
+	color: $light-black;
+}
+
+h1, h2, h3, h4, h5 {
+	line-height: 120%;
+	margin-bottom: 1.2em;
+}
+
+h1 {
+	@include fontSize(26px, 2.6rem);
+	text-transform: uppercase;
+}
+
+h2 {
+	@include fontSize(24px, 2.4rem);
+}
+
+h3 {
+	@include fontSize(22px, 2.2rem);
+}
+
+h4 {
+	@include fontSize(20px, 2rem);
+}
+
+h5 {
+	@include fontSize(18px, 1.8rem);
+}

@@ -1,0 +1,12 @@
+$font-color: #000;
+
+@mixin fontSize($px, $rem) {
+    font-size: $px;
+    font-size: $rem;
+}
+
+@import 'css-reset';
+@import 'global';
+@import 'main';
+@import 'header';
+@import 'welcome-block';

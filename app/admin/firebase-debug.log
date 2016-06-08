@@ -1,0 +1,84 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\exoslav\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] CLI Version:  3.0.0
+[debug] Platform:     win32
+[debug] Node Version: v4.2.6
+[debug] Time:         Thu May 26 2016 21:54:56 GMT+0200 (Střední Evropa (letní čas))
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: c:\xampp\htdocs\projekty\cestovni-denik.cz
+[info] Public Directory: ./app
+[info] 
+[info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\exoslav\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] CLI Version:  3.0.0
+[debug] Platform:     win32
+[debug] Node Version: v4.2.6
+[debug] Time:         Sat May 28 2016 10:55:50 GMT+0200 (Střední Evropa (letní čas))
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: c:\xampp\htdocs\projekty\cestovni-denik.cz
+[info] Public Directory: ./app
+[info] 
+[info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\exoslav\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] CLI Version:  3.0.1
+[debug] Platform:     win32
+[debug] Node Version: v4.2.6
+[debug] Time:         Mon May 30 2016 19:44:14 GMT+0200 (Střední Evropa (letní čas))
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: c:\xampp\htdocs\projekty\cestovni-denik.cz
+[info] Public Directory: ./app
+[info] 
+[info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\exoslav\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] CLI Version:  3.0.1
+[debug] Platform:     win32
+[debug] Node Version: v4.2.6
+[debug] Time:         Wed Jun 01 2016 19:54:33 GMT+0200 (Střední Evropa (letní čas))
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: c:\xampp\htdocs\projekty\cestovni-denik.cz
+[info] Public Directory: ./app
+[info] 
+[info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\exoslav\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] CLI Version:  3.0.1
+[debug] Platform:     win32
+[debug] Node Version: v4.2.6
+[debug] Time:         Mon Jun 06 2016 19:40:41 GMT+0200 (Střední Evropa (letní čas))
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: c:\xampp\htdocs\projekty\cestovni-denik.cz
+[info] Public Directory: ./app
+[info] 
+[info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\exoslav\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] CLI Version:  3.0.1
+[debug] Platform:     win32
+[debug] Node Version: v4.2.6
+[debug] Time:         Tue Jun 07 2016 19:19:37 GMT+0200 (Střední Evropa (letní čas))
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: c:\xampp\htdocs\projekty\cestovni-denik.cz
+[info] Public Directory: ./app
+[info] 
+[info] Server listening at: http://localhost:5000

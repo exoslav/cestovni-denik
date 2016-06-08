@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Cestovní deník</title>
+  <meta name="description" content="Administrace">
+  <meta name="keywords" content="Administrace pro web cestovni-denik.cz">
+  <meta name="author" content="Martin Nikl">
+	<meta name="viewport" content="width=device-width">
+	
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<link rel="stylesheet" href="/src/css/bootsrap.min.css">
+
+	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+	<script>
+	$(document).ready(function() {
+		alert('test')
+		let loginForm = $('#admin-auth')
+		let opts = {
+			fireBaseConfig: {
+		    apiKey: "AIzaSyDVxtKl-WYUE_y-kJOyIVEqqCmtznCRQH0",
+		    authDomain: "tutorial-8fb62.firebaseapp.com",
+		    databaseURL: "https://tutorial-8fb62.firebaseio.com",
+		    storageBucket: "tutorial-8fb62.appspot.com"
+		  },
+		  formId: loginForm,
+			preInitFunction: preLoader
+		}
+
+		let preLoader = () => {
+			$('#preloader').hide()
+		}
+
+		window.adminInit(opts)
+
+
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyDVxtKl-WYUE_y-kJOyIVEqqCmtznCRQH0",
+	    authDomain: "tutorial-8fb62.firebaseapp.com",
+	    databaseURL: "https://tutorial-8fb62.firebaseio.com",
+	    storageBucket: "tutorial-8fb62.appspot.com",
+	  };
+	  firebase.initializeApp(config);
+
+		firebase.auth().signOut().then(function() {
+		  // Sign-out successful.
+		}, function(error) {
+		  // An error happened.
+		});
+
+		function handleAuth() {
+			var email = 'm.nikl@seznam.cz';
+			var password = 'xx206xt';
+
+			firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+			  // Handle Errors here.
+			  var errorCode = error.code;
+			  var errorMessage = error.message;
+
+        if (errorCode === 'auth/wrong-password') {
+          alert('Wrong password.');
+        } else {
+          console.error(error);
+        }
+			});
+		}
+
+		$('#auth').on('click', function() {
+			handleAuth();
+		})
+
+		firebase.auth().onAuthStateChanged(function(user) {
+		  if (user) {
+		    console.log(user.email)
+		  } else {
+		    console.log('no user is sign in')
+		  }
+		});
+		
+		var database = firebase.database();
+
+		function writeUserData(userId, name, email) {
+		  firebase.database().ref('news/' + userId).set({
+		    username: name,
+		    email: email
+		  });
+		}
+	})
+	</script>
+</head>
+
+	<body class="admin-login">
+
+		<div class="container">
+			<h1>Přihlášení do webové administrace</h1>
+
+			<div id="admin-login-form">
+				<form action="">
+					<div class="label-wrap">
+						<input type="text">
+					</div>
+
+					<div class="label-wrap">
+						<input type="password">
+					</div>
+
+					<button type="submit">Přihlásit</button>
+				</form>
+			</div>
+		</div>
+
+	</body>
+</html>
