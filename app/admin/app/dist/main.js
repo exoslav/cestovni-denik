@@ -50,7 +50,7 @@
 	
 	var _firebase = __webpack_require__(2);
 	
-	__webpack_require__(9);
+	__webpack_require__(10);
 	
 	
 	window.adminInit = function () {
@@ -117,8 +117,6 @@
 	
 	var _administration = __webpack_require__(4);
 	
-	var _constants = __webpack_require__(1);
-	
 	var _render = __webpack_require__(6);
 	
 	var db = exports.db = void 0;
@@ -146,8 +144,6 @@
 				});
 				console.log('fail to log in: ', user);
 			}
-	
-			_constants.customFunctions.postInitFunction();
 		});
 	};
 	
@@ -156,7 +152,7 @@
 	};
 	
 	var createNewsItem = exports.createNewsItem = function createNewsItem() {
-		db.ref('news').push({ name: 'test push' });
+		db.ref('news').push({ name: 'test pussh' });
 	};
 	
 	var getNews = exports.getNews = function getNews() {
@@ -333,7 +329,11 @@
 		value: true
 	});
 	var administration = exports.administration = function administration(lngs) {
-		return "\n\t<header>\n\t\t<div>\n\t\t\t<div class=\"container\">\n\t\t\t\t<div class=\"project-name\">\n\t\t\t\t\t<h1>www." + lngs.globals.projectName + ".cz</h1>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"control-panel\">\n\t\t\t\t\t<button id=\"admin-logout\" type=\"button\">Odhlášení</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</header>\n\t\n\t<main class=\"container\">\n\t\t<div id=\"admin-welcome-text\">\n\t\t\t<div class=\"admin-welcome-text-preloader\">preloader</div>\n\t\t</div>\n\n\t\t<div id=\"admin-position\">\n\t\t\t<div class=\"admin-position-preloader\">preloader</div>\n\t\t</div>\n\n\t\t<div id=\"admin-news\">\n\t\t\t<div class=\"admin-news-preloader\">preloader</div>\n\t\t</div>\n\t</main>\n\t\n\t<footer></footer>";
+		return "\n\t<header>\n\t\t<div>\n\t\t\t<div class=\"container\">\n\t\t\t\t<div class=\"project-name\">\n\t\t\t\t\t<h1>www." + lngs.globals.projectName + ".cz</h1>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"control-panel\">\n\t\t\t\t\t<button id=\"admin-logout\" type=\"button\">Odhlášení</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</header>\n\n\t<main class=\"container\">\n\t\t<div id=\"admin-welcome-text\">\n\t\t\t<div class=\"admin-welcome-text-preloader\">preloader</div>\n\t\t</div>\n\n\t\t<div id=\"admin-position\">\n\t\t\t<div class=\"admin-position-preloader\">preloader</div>\n\t\t</div>\n\n\t\t<div id=\"admin-news\">\n\t\t\t<div class=\"admin-news-preloader\">preloader</div>\n\t\t</div>\n\t</main>\n\n\t<footer></footer>\n\t";
+	};
+	
+	var createNewsModalContent = exports.createNewsModalContent = function createNewsModalContent() {
+		return "\n\t\t<div class=\"modal-window-header\">\n\t\t\t<input value=\"Název příběhu\">\n\t\t\t<input value=\"Datum\">\n\t\t\t<input value=\"Lat\">\n\t\t\t<input value=\"Lng\">\n\t\t</div>\n\n\t\t<div class=\"modal-window-content\">\n\t\t\t<input value=\"Anotace\">\n\t\t\t<input value=\"Obsah\">\n\t\t\t<input value=\"Lat\">\n\t\t\t<input value=\"Lng\">\n\t\t</div>\n\t";
 	};
 
 /***/ },
@@ -351,12 +351,22 @@
 	
 	var _modals = __webpack_require__(7);
 	
+	var _helpers = __webpack_require__(9);
+	
 	var _firebase = __webpack_require__(2);
 	
 	var loadAdministrationModules = exports.loadAdministrationModules = function loadAdministrationModules() {
-		(0, _firebase.getWelcomeText)();
-		(0, _firebase.getPosition)();
-		(0, _firebase.getNews)();
+		var renderFunctions = {
+			getWelcomeText: _firebase.getWelcomeText,
+			getPosition: _firebase.getPosition,
+			getNews: _firebase.getNews
+		};
+	
+		(0, _helpers.setCheckAsyncTotal)(Object.keys(renderFunctions).length);
+	
+		Object.keys(renderFunctions).forEach(function (key, index) {
+			if (typeof renderFunctions[key] === 'function') renderFunctions[key]();
+		});
 	
 		administrationPostRenderFunction();
 	};
@@ -371,26 +381,26 @@
 	
 		renderUI(selector);
 	
-		console.log('welcomeText was added');
+		(0, _helpers.checkAsyncFirebase)();
 	};
 	
 	var renderPosition = exports.renderPosition = function renderPosition(data) {
 		var selector = 'admin-position',
 		    position = data,
-		    el = '\n\t\t\t<div>\n\t\t\t\t<div class="editable where-we-are">\n\t\t\t\t\t<input \n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="position/whereWeAre"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeAre.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="position/whereWeAre"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeAre.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="editable where-we-go">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="position/whereWeGo"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeGo.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="position/whereWeGo"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeGo.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>\n\t\t\t</div>';
+		    el = '\n\t\t\t<div>\n\t\t\t\t<div class="editable where-we-are">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="position/whereWeAre"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeAre.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="position/whereWeAre"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeAre.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="editable where-we-go">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="position/whereWeGo"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeGo.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="position/whereWeGo"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeGo.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>\n\t\t\t</div>';
 	
 		$('.' + selector + '-preloader').remove();
 		$(el).appendTo('#' + selector);
 	
 		renderUI(selector);
 	
-		console.log('position was added');
+		(0, _helpers.checkAsyncFirebase)();
 	};
 	
 	var renderNewsList = exports.renderNewsList = function renderNewsList(data) {
 		var selector = 'admin-news',
 		    news = data,
-		    el = $('<ol/>', {
+		    el = $('<ul/>', {
 			class: 'collapsible popout collapsible-accordion'
 		});
 	
@@ -398,7 +408,7 @@
 			console.log(key);
 			var newsType = news[key].type === 1 ? 'nz' : 'aust';
 	
-			var newPost = '\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<div class="collapsible-header">\n\t\t\t\t\t\t\t<img class="admin-news-icon" src="../src/imgs/' + newsType + '-icon.png">\n\t\t\t\t\t\t\t<a\n\t\t\t\t\t\t\t\tclass="admin-news-item"\n\t\t\t\t\t\t\t\tdata-db-key="' + key + '"\n\t\t\t\t\t\t\t\tid="admin-news-item-' + news[key].id + '"\n\t\t\t\t\t\t\t\thref="#"\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\t' + news[key].header + '\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t\t\t' + news[key].desc + '\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t<div class="collapsible-footer">\n\t\t\t\t\t\t\t\tupravit\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</li>';
+			var newPost = '\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<div class="collapsible-header">\n\t\t\t\t\t\t\t<img class="admin-news-icon" src="../src/imgs/' + newsType + '-icon.png">\n\t\t\t\t\t\t\t<a\n\t\t\t\t\t\t\t\tclass="admin-news-item"\n\t\t\t\t\t\t\t\tdata-db-key="' + key + '"\n\t\t\t\t\t\t\t\tid="admin-news-item-' + news[key].id + '"\n\t\t\t\t\t\t\t\thref="#"\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\t' + news[key].header + '\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t\t\t' + news[key].desc + '\n\n\t\t\t\t\t\t\t<div class="collapsible-footer">\n\t\t\t\t\t\t\t\tupravit\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</li>';
 	
 			$(newPost).appendTo(el);
 		});
@@ -411,6 +421,9 @@
 	
 		$('<a/>', {
 			id: 'new-story',
+			class: 'waves-effect waves-light btn modal-trigger',
+			'data-modal-type': 'createNewsModalContent',
+			href: '#modal1',
 			text: 'nový příběh'
 		}).appendTo('#' + selector);
 	
@@ -424,7 +437,7 @@
 			});
 		});
 	
-		console.log('news were added');
+		(0, _helpers.checkAsyncFirebase)();
 	};
 	
 	function handleNews(data, selector) {
@@ -475,8 +488,11 @@
 			if (!self.hasClass('ui-edit-is-open')) writeUserData(pathName, updateData);
 		});
 	
-		$('body').on('click', '#new-story', function () {
-			(0, _modals.openModal)({ header: 'header name' }, $('<div/>', { text: 'text' }));
+		$('body').on('click', '#new-story', function (e) {
+			(0, _modals.openModal)({
+				type: $(e.target).attr('data-modal-type'),
+				header: 'Název nového příběhu'
+			}, $('<div/>', { text: 'text' }));
 		});
 	}
 	
@@ -497,37 +513,44 @@
 	
 	var _actions = __webpack_require__(8);
 	
+	var _templates = __webpack_require__(5);
+	
 	var defaultOpts = {
 		header: 'modalni okno'
 	};
 	
-	var openModal = exports.openModal = function openModal(opts, content) {
+	var openModal = exports.openModal = function openModal() {
+		var opts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var content = arguments[1];
+	
+		$('#modal-window').remove();
+	
 		opts = Object.assign(defaultOpts, opts);
 	
 		var modalWindow = $('<div/>', {
-			class: 'modal-window'
+			id: 'modal-window',
+			class: 'modal modal-fixed-footer'
 		});
 	
-		var modalWindowHeader = $('<div/>', {
-			class: 'modal-window-header'
-		}).appendTo(modalWindow);
+		var template = void 0;
+		switch (opts.type) {
+			case 'createNewsModalContent':
+				template = (0, _templates.createNewsModalContent)();
+				break;
+		}
 	
-		var closeButton = $('<button/>', {
-			type: 'button',
-			text: 'zavřít',
-			class: 'modal-window-close'
-		}).appendTo(modalWindowHeader);
+		$(template).appendTo(modalWindow);
+		// let modalWindowHeader = $('<div/>', {
+		// 	class: 'modal-window-header'
+		// }).appendTo(modalWindow)
 	
-		$('<h2/>', {
-			text: opts.header,
-			class: 'modal-window-headline'
-		}).appendTo(modalWindowHeader);
+		// let closeButton = $('<button/>', {
+		// 	type: 'button',
+		// 	text: 'zavřít',
+		// 	class: 'modal-window-close'
+		// }).appendTo(modalWindowHeader)
 	
-		var modalWindowContent = $('<div/>', {
-			class: 'modal-window-content'
-		}).appendTo(modalWindow);
-	
-		content.appendTo(modalWindowContent);
+		// content.appendTo(modalWindowContent)
 	
 		modalWindow.appendTo('body');
 	
@@ -536,7 +559,57 @@
 	
 	function postRenderFunction() {
 		(0, _actions.closeModalWindow)();
+	
+		$('#modal-window').openModal();
 	}
+	
+	/*
+	import { closeModalWindow } from './actions'
+
+	let defaultOpts = {
+		header: 'modalni okno'
+	}
+
+	export let openModal = (opts, content) => {
+		opts = Object.assign(defaultOpts, opts)
+
+		let modalWindow = $('<div/>', {
+			id: 'modal-window',
+			class: 'modal modal-fixed-footer'
+		})
+
+		let modalWindowHeader = $('<div/>', {
+			class: 'modal-window-header'
+		}).appendTo(modalWindow)
+
+		let closeButton = $('<button/>', {
+			type: 'button',
+			text: 'zavřít',
+			class: 'modal-window-close'
+		}).appendTo(modalWindowHeader)
+
+		$('<h2/>', {
+			text: opts.header,
+			class: 'modal-window-headline'
+		}).appendTo(modalWindowHeader)
+
+		let modalWindowContent = $('<div/>', {
+			class: 'modal-window-content'
+		}).appendTo(modalWindow)
+
+		content.appendTo(modalWindowContent)
+
+		modalWindow.appendTo('body')
+		console.log()
+		postRenderFunction()
+	}
+
+	function postRenderFunction() {
+		closeModalWindow()
+
+	  $('#modal-window').openModal();
+	}
+	*/
 
 /***/ },
 /* 8 */
@@ -559,6 +632,30 @@
 
 /***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.checkAsyncFirebase = exports.setCheckAsyncTotal = undefined;
+	
+	var _constants = __webpack_require__(1);
+	
+	var checkAsyncCounter = 0;
+	var checkAsyncTotal = void 0;
+	
+	var setCheckAsyncTotal = exports.setCheckAsyncTotal = function setCheckAsyncTotal(total) {
+	  checkAsyncTotal = total;
+	};
+	
+	var checkAsyncFirebase = exports.checkAsyncFirebase = function checkAsyncFirebase() {
+	  if (checkAsyncCounter === checkAsyncTotal - 1) _constants.customFunctions.postInitFunction();else checkAsyncCounter++;
+	};
+
+/***/ },
+/* 10 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

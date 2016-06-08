@@ -13,7 +13,7 @@ export let administration = lngs => {
 			</div>
 		</div>
 	</header>
-	
+
 	<main class="container">
 		<div id="admin-welcome-text">
 			<div class="admin-welcome-text-preloader">preloader</div>
@@ -27,6 +27,25 @@ export let administration = lngs => {
 			<div class="admin-news-preloader">preloader</div>
 		</div>
 	</main>
-	
-	<footer></footer>`
+
+	<footer></footer>
+	`
+}
+
+export let createNewsModalContent = () => {
+	return `
+		<div class="modal-window-header">
+			<input value="Název příběhu">
+			<input value="Datum">
+			<input value="Lat">
+			<input value="Lng">
+		</div>
+
+		<div class="modal-window-content">
+			<input value="Anotace">
+			<input value="Obsah">
+			<input value="Lat">
+			<input value="Lng">
+		</div>
+	`
 }

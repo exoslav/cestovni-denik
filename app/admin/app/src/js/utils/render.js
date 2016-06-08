@@ -1,11 +1,21 @@
 import { lngs } from '../constants'
 import { openModal } from './modals'
+import { checkAsyncFirebase, setCheckAsyncTotal } from './helpers'
 import { db, createNewsItem, getNews, getWelcomeText, getPosition } from '../firebase'
 
 export let loadAdministrationModules = () => {
-	getWelcomeText()
-	getPosition()
-	getNews()
+	let renderFunctions = {
+		getWelcomeText: getWelcomeText,
+		getPosition: getPosition,
+		getNews: getNews
+	}
+
+	setCheckAsyncTotal(Object.keys(renderFunctions).length)
+
+	Object.keys(renderFunctions).forEach((key, index) => {
+		if(typeof renderFunctions[key] === 'function')
+			renderFunctions[key]()
+	})
 
 	administrationPostRenderFunction()
 }
@@ -36,7 +46,7 @@ export let renderWelcomeText = data => {
 
 	renderUI(selector)
 
-  console.log('welcomeText was added')
+	checkAsyncFirebase()
 }
 
 export let renderPosition = data => {
@@ -45,7 +55,7 @@ export let renderPosition = data => {
 			el = `
 			<div>
 				<div class="editable where-we-are">
-					<input 
+					<input
 						disabled
 						data-db-key="header"
 						data-db-path="position/whereWeAre"
@@ -84,13 +94,13 @@ export let renderPosition = data => {
 
 	renderUI(selector)
 
-  console.log('position was added')
+	checkAsyncFirebase()
 }
 
 export let renderNewsList = data => {
 	let selector = 'admin-news',
 			news = data,
-			el = $('<ol/>', {
+			el = $('<ul/>', {
 				class: 'collapsible popout collapsible-accordion'
 			})
 
@@ -114,7 +124,7 @@ export let renderNewsList = data => {
 
 						<div class="collapsible-body">
 							${news[key].desc}
-							
+
 							<div class="collapsible-footer">
 								upravit
 							</div>
@@ -133,6 +143,9 @@ export let renderNewsList = data => {
 
   $('<a/>', {
   	id: 'new-story',
+		class: 'waves-effect waves-light btn modal-trigger',
+		'data-modal-type': 'createNewsModalContent',
+		href: '#modal1',
   	text: 'nový příběh'
   }).appendTo(`#${selector}`)
 
@@ -146,7 +159,7 @@ export let renderNewsList = data => {
 	  })
 	})
 
-  console.log('news were added')
+	checkAsyncFirebase()
 }
 
 function handleNews(data, selector) {
@@ -203,8 +216,12 @@ function administrationPostRenderFunction() {
 			writeUserData(pathName, updateData)
 	})
 
-	$('body').on('click', '#new-story', () => {
-		openModal({header: 'header name'}, $('<div/>', {text: 'text'}))
+	$('body').on('click', '#new-story', e => {
+		openModal({
+			type: $(e.target).attr('data-modal-type'),
+			header: 'Název nového příběhu'
+		},
+			$('<div/>', {text: 'text'}))
 	})
 }
 

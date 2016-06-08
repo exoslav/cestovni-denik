@@ -1,6 +1,5 @@
 import { createAlertMsg, createLoginForm } from './utils/form-login'
 import { createAdministration } from './utils/administration'
-import { customFunctions } from './constants'
 import { renderWelcomeText, renderPosition, renderNewsList } from './utils/render'
 
 export let db
@@ -28,9 +27,7 @@ export let setUserState = (opts) => {
 			})
 			console.log('fail to log in: ', user)
 	  }
-	   
-	  customFunctions.postInitFunction()
-	});	
+	});
 }
 
 export let setDBreference = () => {
@@ -38,13 +35,13 @@ export let setDBreference = () => {
 }
 
 export let createNewsItem = () => {
-	db.ref('news').push({name: 'test push'});
+	db.ref('news').push({name: 'test pussh'});
 }
 
 export let getNews = () => {
 	db.ref('news').on('value', function(data) {
 		db.ref('news').off()
-		
+
 		renderNewsList(data.val())
 	})
 }
@@ -52,7 +49,7 @@ export let getNews = () => {
 export let getWelcomeText = () => {
 	db.ref('welcomeText').on('value', function(data) {
 		db.ref('welcomeText').off()
-		
+
 		renderWelcomeText(data.val())
 	})
 }
