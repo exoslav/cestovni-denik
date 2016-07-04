@@ -44,6 +44,7 @@
 			input {
 				display: block;
 				width: 100%;
+				@include fontSize(16px, 1.6rem);
 
 				&[data-db-key='header'] {
 					background: transparent;
@@ -54,6 +55,17 @@
 }
 
 #admin-news {
+	.admin-news-item {
+		position: relative;
+		margin: 0;
+
+		.admin-news-edit {
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+	}
+
 	.admin-news-icon {
 		width: 20px;
 	}

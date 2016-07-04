@@ -3,7 +3,3 @@ export let closeModalWindow = () => {
 		closeWindow()
 	})
 }
-
-function closeWindow() {
-	$('.modal-window').hide().remove()
-}

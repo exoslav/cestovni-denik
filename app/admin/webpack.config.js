@@ -1,5 +1,6 @@
 var ExtractText = require('extract-text-webpack-plugin');
 var webpack = require('webpack');
+var webpack = require('path');
 
 // tohle je zhruba zakladni nastaveni konfigurace webpacku
 module.exports = (function(env) {

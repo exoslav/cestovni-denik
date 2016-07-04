@@ -6256,9 +6256,19 @@ h5 {
     margin-bottom: 1em; }
     #administration main > div[id*='admin-'] input {
       display: block;
-      width: 100%; }
+      width: 100%;
+      font-size: 16px;
+      font-size: 1.6rem; }
       #administration main > div[id*='admin-'] input[data-db-key='header'] {
         background: transparent; }
+
+#admin-news .admin-news-item {
+  position: relative;
+  margin: 0; }
+  #admin-news .admin-news-item .admin-news-edit {
+    position: absolute;
+    top: 0;
+    right: 0; }
 
 #admin-news .admin-news-icon {
   width: 20px; }
@@ -6289,12 +6299,13 @@ input {
 
 #preloader-overpage {
   background: rgba(255, 255, 255, 0.6);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden; }
+  overflow: hidden;
+  z-index: 9999; }
   #preloader-overpage #cssload-pgloading:after {
     content: "";
     z-index: -1;

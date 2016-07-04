@@ -1,7 +1,7 @@
 import { hideAdminLogin } from './form-login'
 import { getNews, getWelcomeText, getPosition } from '../firebase'
 import { administration } from './templates'
-import { loadAdministrationModules } from './render'
+import { loadAdministrationModules } from './render/index'
 import { lngs, customFunctions } from '../constants'
 
 export let createAdministration = () => {

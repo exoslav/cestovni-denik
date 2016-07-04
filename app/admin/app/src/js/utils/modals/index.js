@@ -1,96 +1,55 @@
 import { closeModalWindow } from './actions'
+import { postRenderFunctions } from './postRenderFunctions'
 import { createNewsModalContent } from '../templates'
 
 let defaultOpts = {
 	header: 'modalni okno'
 }
 
+/* otevre modalni okno
+opts - type obj
+	opts.type - typ modalniho okna
+content - type obj
+	data pro vykresleni do template
+*/
 export let openModal = (opts = {}, content) => {
-	$('#modal-window').remove()
-	
+	removeModal()
 	opts = Object.assign(defaultOpts, opts)
+
+	let modalPostRenderFunctions = {}
 
 	let modalWindow = $('<div/>', {
 		id: 'modal-window',
-		class: 'modal modal-fixed-footer'
+		class: 'modal'
 	})
 
 	let template
+	modalPostRenderFunctions.globalPostRenderFunction = postRenderFunction
 	switch(opts.type) {
-		case 'createNewsModalContent':
-			template = createNewsModalContent()
+		case 'create-news-modal':
+			template = createNewsModalContent(content)
+			modalPostRenderFunctions.createNews = postRenderFunctions.createNews
 			break
 	}
 
 	$(template).appendTo(modalWindow)
-	// let modalWindowHeader = $('<div/>', {
-	// 	class: 'modal-window-header'
-	// }).appendTo(modalWindow)
-
-	// let closeButton = $('<button/>', {
-	// 	type: 'button',
-	// 	text: 'zavřít',
-	// 	class: 'modal-window-close'
-	// }).appendTo(modalWindowHeader)
-
-	// content.appendTo(modalWindowContent)
 
 	modalWindow.appendTo('body')
 
-	postRenderFunction()
-}
-
-function postRenderFunction() {
-	closeModalWindow()
-
-  $('#modal-window').openModal();
-}
-
-
-/*
-import { closeModalWindow } from './actions'
-
-let defaultOpts = {
-	header: 'modalni okno'
-}
-
-export let openModal = (opts, content) => {
-	opts = Object.assign(defaultOpts, opts)
-
-	let modalWindow = $('<div/>', {
-		id: 'modal-window',
-		class: 'modal modal-fixed-footer'
+	// volani postrender funkci
+	Object.keys(modalPostRenderFunctions).forEach(key => {
+		if(typeof modalPostRenderFunctions[key] === 'function')
+			modalPostRenderFunctions[key]()
 	})
+}
 
-	let modalWindowHeader = $('<div/>', {
-		class: 'modal-window-header'
-	}).appendTo(modalWindow)
-
-	let closeButton = $('<button/>', {
-		type: 'button',
-		text: 'zavřít',
-		class: 'modal-window-close'
-	}).appendTo(modalWindowHeader)
-
-	$('<h2/>', {
-		text: opts.header,
-		class: 'modal-window-headline'
-	}).appendTo(modalWindowHeader)
-
-	let modalWindowContent = $('<div/>', {
-		class: 'modal-window-content'
-	}).appendTo(modalWindow)
-
-	content.appendTo(modalWindowContent)
-
-	modalWindow.appendTo('body')
-	console.log()
-	postRenderFunction()
+function removeModal() {
+	$('#modal-window').remove()
 }
 
 function postRenderFunction() {
-	closeModalWindow()
-
-  $('#modal-window').openModal();
+	//closeModalWindow()
+	console.log('modal postRenderFunction')
+	// otevre modalni okno
+  $('#modal-window').openModal()
 }
-*/

@@ -32,20 +32,48 @@ export let administration = lngs => {
 	`
 }
 
-export let createNewsModalContent = () => {
-	return `
+export let createNewsModalContent = ({
+	modalHeader = 'Vytvoření novinky',
+	header = 'Název příběhu',
+	date = 'Datum',
+	lat = 'Lat',
+	lng = 'Lng',
+	annotation = 'Anotace',
+	content = 'Obsah'
+}) => {
+	let template = `
 		<div class="modal-window-header">
-			<input value="Název příběhu">
-			<input value="Datum">
-			<input value="Lat">
-			<input value="Lng">
+			<h2>${modalHeader}</h2>
 		</div>
 
 		<div class="modal-window-content">
-			<input value="Anotace">
-			<input value="Obsah">
-			<input value="Lat">
-			<input value="Lng">
+			<input data-type="header" value="${header}">
+			<input data-type="date" value="${date}">
+			<input data-type="lat" value="${lat}">
+			<input data-type="lng" value="${lng}">
+			<input data-type="desc" value="${annotation}">
+			<input data-type="content" value="${content}">
+		</div>
+
+		<div class="modal-window-footer">
+			<button id="create-new-story" class="waves-effect waves-light btn" type="button">Vytvořit novinku</button>
 		</div>
 	`
+
+	return template
 }
+
+export let preLoader = `
+	<div id="preloader-overpage">
+		<div id="cssload-pgloading">
+			<div class="cssload-loadingwrap">
+				<ul class="cssload-bokeh">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+`

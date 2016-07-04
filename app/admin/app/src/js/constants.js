@@ -1,5 +1,15 @@
+import { removePreloader } from './utils/helpers'
+
+// uklada stav aplikace... pokud se nactou vsechny komponenty, je appState true
+export let appState = false
+export let setAppState = val =>	appState = val
+
 export let lngs = {}
-export let customFunctions = {}
+export const customFunctions = {}
+export const _postInitFunctions = {
+	removePreloader
+}
+export const preloaderOverpage = 'preloader-overpage'
 
 export let appStatus = false
 
