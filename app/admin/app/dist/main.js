@@ -48,7 +48,7 @@
 	
 	var _constants = __webpack_require__(1);
 	
-	var _firebase = __webpack_require__(3);
+	var _firebase = __webpack_require__(4);
 	
 	var _helpers = __webpack_require__(2);
 	
@@ -132,7 +132,7 @@
 	});
 	exports.callFunctionsInObject = exports.checkAsyncFirebase = exports.removePreloader = exports.createPreloader = exports.setCheckAsyncTotal = undefined;
 	
-	var _templates = __webpack_require__(6);
+	var _templates = __webpack_require__(3);
 	
 	var _constants = __webpack_require__(1);
 	
@@ -170,6 +170,42 @@
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var administration = exports.administration = function administration(lngs) {
+		return '\n\t<header>\n\t\t<div>\n\t\t\t<div class="container">\n\t\t\t\t<div class="project-name">\n\t\t\t\t\t<h1>www.' + lngs.globals.projectName + '.cz</h1>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="control-panel">\n\t\t\t\t\t<button id="admin-logout" type="button">Odhlášení</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</header>\n\n\t<main class="container">\n\t\t<div id="admin-welcome-text">\n\t\t\t<div class="admin-welcome-text-preloader">preloader</div>\n\t\t</div>\n\n\t\t<div id="admin-position">\n\t\t\t<div class="admin-position-preloader">preloader</div>\n\t\t</div>\n\n\t\t<div id="admin-news">\n\t\t\t<div class="admin-news-preloader">preloader</div>\n\t\t</div>\n\t</main>\n\n\t<footer></footer>\n\t';
+	};
+	
+	var createNewsModalContent = exports.createNewsModalContent = function createNewsModalContent(_ref) {
+		var _ref$modalHeader = _ref.modalHeader;
+		var modalHeader = _ref$modalHeader === undefined ? 'Vytvoření novinky' : _ref$modalHeader;
+		var _ref$header = _ref.header;
+		var header = _ref$header === undefined ? 'Název příběhu' : _ref$header;
+		var _ref$date = _ref.date;
+		var date = _ref$date === undefined ? 'Datum' : _ref$date;
+		var _ref$lat = _ref.lat;
+		var lat = _ref$lat === undefined ? 'Lat' : _ref$lat;
+		var _ref$lng = _ref.lng;
+		var lng = _ref$lng === undefined ? 'Lng' : _ref$lng;
+		var _ref$annotation = _ref.annotation;
+		var annotation = _ref$annotation === undefined ? 'Anotace' : _ref$annotation;
+		var _ref$content = _ref.content;
+		var content = _ref$content === undefined ? 'Obsah' : _ref$content;
+	
+		var template = '\n\t\t<div class="modal-window-header">\n\t\t\t<h2>' + modalHeader + '</h2>\n\t\t</div>\n\n\t\t<div class="modal-window-content">\n\t\t\t<input data-type="header" value="' + header + '">\n\t\t\t<input data-type="date" value="' + date + '">\n\t\t\t<input data-type="lat" value="' + lat + '">\n\t\t\t<input data-type="lng" value="' + lng + '">\n\t\t\t<input data-type="desc" value="' + annotation + '">\n\t\t\t<input data-type="content" value="' + content + '">\n\t\t</div>\n\n\t\t<div class="modal-window-footer">\n\t\t\t<button id="create-new-story" class="waves-effect waves-light btn" type="button">Vytvořit novinku</button>\n\t\t</div>\n\t';
+	
+		return template;
+	};
+	
+	var preLoader = exports.preLoader = '\n\t<div id="preloader-overpage">\n\t\t<div id="cssload-pgloading">\n\t\t\t<div class="cssload-loadingwrap">\n\t\t\t\t<ul class="cssload-bokeh">\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n';
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -179,9 +215,9 @@
 	});
 	exports.getPosition = exports.getWelcomeText = exports.deleteSingleNewItem = exports.getSingleNewItem = exports.getNews = exports.createNewsItem = exports.setDBreference = exports.setUserState = exports.setFirebaseAuth = exports.user = exports.db = undefined;
 	
-	var _formLogin = __webpack_require__(4);
+	var _formLogin = __webpack_require__(5);
 	
-	var _administration = __webpack_require__(5);
+	var _administration = __webpack_require__(6);
 	
 	var _index = __webpack_require__(11);
 	
@@ -278,7 +314,7 @@
 	};
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -290,7 +326,7 @@
 	
 	var _constants = __webpack_require__(1);
 	
-	var _firebase = __webpack_require__(3);
+	var _firebase = __webpack_require__(4);
 	
 	var admin = void 0; // jQuery obj
 	
@@ -375,7 +411,7 @@
 	}
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -385,11 +421,11 @@
 	});
 	exports.createAdministration = undefined;
 	
-	var _formLogin = __webpack_require__(4);
+	var _formLogin = __webpack_require__(5);
 	
-	var _firebase = __webpack_require__(3);
+	var _firebase = __webpack_require__(4);
 	
-	var _templates = __webpack_require__(6);
+	var _templates = __webpack_require__(3);
 	
 	var _index = __webpack_require__(7);
 	
@@ -418,42 +454,6 @@
 	};
 
 /***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	var administration = exports.administration = function administration(lngs) {
-		return '\n\t<header>\n\t\t<div>\n\t\t\t<div class="container">\n\t\t\t\t<div class="project-name">\n\t\t\t\t\t<h1>www.' + lngs.globals.projectName + '.cz</h1>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="control-panel">\n\t\t\t\t\t<button id="admin-logout" type="button">Odhlášení</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</header>\n\n\t<main class="container">\n\t\t<div id="admin-welcome-text">\n\t\t\t<div class="admin-welcome-text-preloader">preloader</div>\n\t\t</div>\n\n\t\t<div id="admin-position">\n\t\t\t<div class="admin-position-preloader">preloader</div>\n\t\t</div>\n\n\t\t<div id="admin-news">\n\t\t\t<div class="admin-news-preloader">preloader</div>\n\t\t</div>\n\t</main>\n\n\t<footer></footer>\n\t';
-	};
-	
-	var createNewsModalContent = exports.createNewsModalContent = function createNewsModalContent(_ref) {
-		var _ref$modalHeader = _ref.modalHeader;
-		var modalHeader = _ref$modalHeader === undefined ? 'Vytvoření novinky' : _ref$modalHeader;
-		var _ref$header = _ref.header;
-		var header = _ref$header === undefined ? 'Název příběhu' : _ref$header;
-		var _ref$date = _ref.date;
-		var date = _ref$date === undefined ? 'Datum' : _ref$date;
-		var _ref$lat = _ref.lat;
-		var lat = _ref$lat === undefined ? 'Lat' : _ref$lat;
-		var _ref$lng = _ref.lng;
-		var lng = _ref$lng === undefined ? 'Lng' : _ref$lng;
-		var _ref$annotation = _ref.annotation;
-		var annotation = _ref$annotation === undefined ? 'Anotace' : _ref$annotation;
-		var _ref$content = _ref.content;
-		var content = _ref$content === undefined ? 'Obsah' : _ref$content;
-	
-		var template = '\n\t\t<div class="modal-window-header">\n\t\t\t<h2>' + modalHeader + '</h2>\n\t\t</div>\n\n\t\t<div class="modal-window-content">\n\t\t\t<input data-type="header" value="' + header + '">\n\t\t\t<input data-type="date" value="' + date + '">\n\t\t\t<input data-type="lat" value="' + lat + '">\n\t\t\t<input data-type="lng" value="' + lng + '">\n\t\t\t<input data-type="desc" value="' + annotation + '">\n\t\t\t<input data-type="content" value="' + content + '">\n\t\t</div>\n\n\t\t<div class="modal-window-footer">\n\t\t\t<button id="create-new-story" class="waves-effect waves-light btn" type="button">Vytvořit novinku</button>\n\t\t</div>\n\t';
-	
-		return template;
-	};
-	
-	var preLoader = exports.preLoader = '\n\t<div id="preloader-overpage">\n\t\t<div id="cssload-pgloading">\n\t\t\t<div class="cssload-loadingwrap">\n\t\t\t\t<ul class="cssload-bokeh">\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n';
-
-/***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -470,7 +470,7 @@
 	
 	var _helpers = __webpack_require__(2);
 	
-	var _firebase = __webpack_require__(3);
+	var _firebase = __webpack_require__(4);
 	
 	var loadAdministrationModules = exports.loadAdministrationModules = function loadAdministrationModules() {
 		var renderFunctions = {
@@ -537,7 +537,7 @@
 	
 	var _postRenderFunctions = __webpack_require__(10);
 	
-	var _templates = __webpack_require__(6);
+	var _templates = __webpack_require__(3);
 	
 	var defaultOpts = {
 		header: 'modalni okno'
@@ -619,9 +619,9 @@
 	});
 	exports.postRenderFunctions = undefined;
 	
-	var _templates = __webpack_require__(6);
+	var _templates = __webpack_require__(3);
 	
-	var _firebase = __webpack_require__(3);
+	var _firebase = __webpack_require__(4);
 	
 	var postRenderFunctions = exports.postRenderFunctions = {
 		createNews: createNews
@@ -838,7 +838,7 @@
 	
 	var _helpers = __webpack_require__(2);
 	
-	var _firebase = __webpack_require__(3);
+	var _firebase = __webpack_require__(4);
 	
 	var actionList = exports.actionList = {
 		deleteItem: deleteItem,

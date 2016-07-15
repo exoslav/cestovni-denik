@@ -6261,14 +6261,43 @@ h5 {
       font-size: 1.6rem; }
       #administration main > div[id*='admin-'] input[data-db-key='header'] {
         background: transparent; }
+    #administration main > div[id*='admin-'] .ui-edit {
+      height: auto;
+      padding: 6px 14px;
+      line-height: 120%;
+      font-size: 13px;
+      font-size: 1.3rem; }
 
 #admin-news .admin-news-item {
   position: relative;
   margin: 0; }
+  #admin-news .admin-news-item .collapsible-header {
+    padding-top: 15px;
+    padding-bottom: 15px; }
+    #admin-news .admin-news-item .collapsible-header h3 {
+      margin-bottom: 0;
+      font-size: 15px;
+      font-size: 1.5rem; }
+    #admin-news .admin-news-item .collapsible-header img {
+      float: left;
+      margin-top: -8px;
+      margin-right: 15px;
+      height: 30px;
+      width: auto; }
   #admin-news .admin-news-item .admin-news-edit {
     position: absolute;
-    top: 0;
-    right: 0; }
+    top: 11px;
+    right: 10px; }
+    #admin-news .admin-news-item .admin-news-edit button {
+      padding: 4px;
+      height: auto;
+      color: #333;
+      line-height: 100%;
+      box-shadow: none;
+      background: none; }
+      #admin-news .admin-news-item .admin-news-edit button i {
+        font-size: 20px;
+        font-size: 2rem; }
 
 #admin-news .admin-news-icon {
   width: 20px; }

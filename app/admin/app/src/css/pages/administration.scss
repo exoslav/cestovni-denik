@@ -5,13 +5,13 @@
 		width: 100%;
 		height: 300px;
 		background: url('../imgs/admin-bg.png') repeat;
-		
+
 		> div {
 			background: $light-black;
-			
+
 			.container {
 				padding: 10px 0;
-				
+
 				.project-name {
 					float: left;
 
@@ -50,6 +50,14 @@
 					background: transparent;
 				}
 			}
+
+			.ui-edit {
+				height: auto;
+				padding: 6px 14px;
+		    line-height: 120%;
+				font-size: 13px;
+				font-size: 1.3rem;
+			}
 		}
 	}
 }
@@ -59,10 +67,43 @@
 		position: relative;
 		margin: 0;
 
+		.collapsible-header {
+			padding-top: 15px;
+			padding-bottom: 15px;
+
+			h3 {
+				margin-bottom: 0;
+				font-size: 15px;
+				font-size: 1.5rem;
+			}
+
+			img {
+				float: left;
+    		margin-top: -8px;
+		    margin-right: 15px;
+		    height: 30px;
+		    width: auto;
+			}
+		}
+
 		.admin-news-edit {
 			position: absolute;
-			top: 0;
-			right: 0;
+			top: 11px;
+	    right: 10px;
+
+			button {
+				padding: 4px;
+				height: auto;
+				color: $light-black;
+		    line-height: 100%;
+				box-shadow: none;
+				background: none;
+
+				i {
+					font-size: 20px;
+					font-size: 2rem;
+				}
+			}
 		}
 	}
 
