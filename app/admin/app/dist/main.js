@@ -52,7 +52,7 @@
 	
 	var _helpers = __webpack_require__(2);
 	
-	__webpack_require__(17);
+	__webpack_require__(15);
 	
 	
 	window.adminInit = function () {
@@ -202,6 +202,7 @@
 		return template;
 	};
 	
+	var createGallery = exports.createGallery = '\n\t<div id="create-gallery-form">\n\t\t<form>\n\t\t\t<input type="file" multiple>\n\t\t\t<label for="create-gallery-file">Nahrajte prosím obrázky</label>\n\t\t\t<button type="submit">Nahrát</button>\n\t\t</form>\n\t</div>\n';
 	var preLoader = exports.preLoader = '\n\t<div id="preloader-overpage">\n\t\t<div id="cssload-pgloading">\n\t\t\t<div class="cssload-loadingwrap">\n\t\t\t\t<ul class="cssload-bokeh">\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n';
 
 /***/ },
@@ -213,22 +214,23 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.getPosition = exports.getWelcomeText = exports.deleteSingleNewItem = exports.getSingleNewItem = exports.getNews = exports.createNewsItem = exports.setDBreference = exports.setUserState = exports.setFirebaseAuth = exports.user = exports.db = undefined;
+	exports.getPosition = exports.getWelcomeText = exports.deleteSingleNewItem = exports.getSingleNewItem = exports.getNews = exports.createNewsItem = exports.setStorageReference = exports.setDBreference = exports.setUserState = exports.setFirebaseAuth = exports.storage = exports.user = exports.db = undefined;
 	
 	var _formLogin = __webpack_require__(5);
 	
 	var _administration = __webpack_require__(6);
 	
-	var _index = __webpack_require__(11);
+	var _index = __webpack_require__(9);
 	
-	var _index2 = __webpack_require__(13);
+	var _index2 = __webpack_require__(11);
 	
-	var _index3 = __webpack_require__(14);
+	var _index3 = __webpack_require__(12);
 	
 	var _helpers = __webpack_require__(2);
 	
 	var db = exports.db = void 0;
 	var user = exports.user = void 0;
+	var storage = exports.storage = void 0;
 	
 	// firebase authentication on click
 	var setFirebaseAuth = exports.setFirebaseAuth = function setFirebaseAuth(email, password) {
@@ -257,6 +259,23 @@
 	
 	var setDBreference = exports.setDBreference = function setDBreference() {
 		exports.db = db = firebase.database();
+		setStorageReference();
+	
+		// // Create a reference with an initial file path and name
+		// var storage = firebase.storage();
+		// var pathReference = storage.ref('images/1.jpg');
+		//
+		// pathReference.getDownloadURL().then(function(url) {
+		//   // Get the download URL for 'images/stars.jpg'
+		//   // This can be inserted into an <img> tag
+		//   // This can also be downloaded directly
+		// }).catch(function(error) {
+		//   // Handle any errors
+		// });
+	};
+	
+	var setStorageReference = exports.setStorageReference = function setStorageReference() {
+		exports.storage = storage = firebase.storage();
 	};
 	
 	var createNewsItem = exports.createNewsItem = function createNewsItem(opts) {
@@ -278,10 +297,7 @@
 	var getSingleNewItem = exports.getSingleNewItem = function getSingleNewItem(item, customFunction) {
 		db.ref('news/' + item).once('value').then(function (data) {
 	
-			if (customFunction && typeof customFunction === 'function') {
-				alert('custom function in firebase');
-				customFunction(data);
-			}
+			if (customFunction && typeof customFunction === 'function') customFunction(data);
 	
 			(0, _helpers.removePreloader)();
 		});
@@ -533,11 +549,13 @@
 	});
 	exports.openModal = undefined;
 	
-	var _actions = __webpack_require__(9);
+	var _actions = __webpack_require__(16);
 	
-	var _postRenderFunctions = __webpack_require__(10);
+	var _postRenderFunctions = __webpack_require__(17);
 	
 	var _templates = __webpack_require__(3);
+	
+	var _helpers = __webpack_require__(2);
 	
 	var defaultOpts = {
 		header: 'modalni okno'
@@ -553,6 +571,7 @@
 		var opts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 		var content = arguments[1];
 	
+		console.log(opts);
 		removeModal();
 		opts = Object.assign(defaultOpts, opts);
 	
@@ -563,13 +582,35 @@
 			class: 'modal'
 		});
 	
-		var template = void 0;
+		var template = void 0,
+		    error = {
+			status: false,
+			msg: 'Modalni okno nemohlo byt vytvoreno kvuli nasledujici chybe: '
+		};
 		modalPostRenderFunctions.globalPostRenderFunction = postRenderFunction;
 		switch (opts.type) {
 			case 'create-news-modal':
 				template = (0, _templates.createNewsModalContent)(content);
 				modalPostRenderFunctions.createNews = _postRenderFunctions.postRenderFunctions.createNews;
 				break;
+			case 'create-news-item-gallery':
+				if (opts.itemKey && typeof opts.itemKey === 'string') {
+					var itemKey = opts.itemKey;
+				} else {
+					error.msg += 'neni k dispozici klic pro novinku';
+					error.status = true;
+				}
+	
+				template = _templates.createGallery;
+				modalPostRenderFunctions.createGallery = function () {
+					return _postRenderFunctions.postRenderFunctions.createGallery(opts.itemKey);
+				};
+				break;
+		}
+	
+		if (error.status) {
+			console.log(error.msg);
+			return false;
 		}
 	
 		$(template).appendTo(modalWindow);
@@ -577,9 +618,7 @@
 		modalWindow.appendTo('body');
 	
 		// volani postrender funkci
-		Object.keys(modalPostRenderFunctions).forEach(function (key) {
-			if (typeof modalPostRenderFunctions[key] === 'function') modalPostRenderFunctions[key]();
-		});
+		(0, _helpers.callFunctionsInObject)(modalPostRenderFunctions);
 	};
 	
 	function removeModal() {
@@ -587,63 +626,12 @@
 	}
 	
 	function postRenderFunction() {
-		//closeModalWindow()
-		console.log('modal postRenderFunction');
 		// otevre modalni okno
 		$('#modal-window').openModal();
 	}
 
 /***/ },
 /* 9 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	var closeModalWindow = exports.closeModalWindow = function closeModalWindow() {
-		$('body').on('click', '.modal-window-close, .modal-window-overlay', function () {
-			closeWindow();
-		});
-	};
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.postRenderFunctions = undefined;
-	
-	var _templates = __webpack_require__(3);
-	
-	var _firebase = __webpack_require__(4);
-	
-	var postRenderFunctions = exports.postRenderFunctions = {
-		createNews: createNews
-	};
-	
-	function createNews() {
-		var opts = {};
-		$('#create-new-story').on('click', function (e) {
-			e.preventDefault();
-	
-			$(_templates.preLoader).appendTo('body');
-	
-			$('.modal-window-content input').each(function (index, item) {
-				opts[$(item).attr('data-type')] = $(item).val();
-			});
-	
-			(0, _firebase.createNewsItem)(opts);
-		});
-	}
-
-/***/ },
-/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -653,7 +641,7 @@
 	});
 	exports.renderWelcomeText = undefined;
 	
-	var _renderUi = __webpack_require__(12);
+	var _renderUi = __webpack_require__(10);
 	
 	var _renderUi2 = _interopRequireDefault(_renderUi);
 	
@@ -675,7 +663,7 @@
 	};
 
 /***/ },
-/* 12 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -700,7 +688,7 @@
 	}
 
 /***/ },
-/* 13 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -710,7 +698,7 @@
 	});
 	exports.renderPosition = undefined;
 	
-	var _renderUi = __webpack_require__(12);
+	var _renderUi = __webpack_require__(10);
 	
 	var _renderUi2 = _interopRequireDefault(_renderUi);
 	
@@ -732,7 +720,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -744,9 +732,11 @@
 	
 	var _constants = __webpack_require__(1);
 	
-	var _helpers = __webpack_require__(15);
+	var _firebase = __webpack_require__(4);
 	
-	var _actions = __webpack_require__(16);
+	var _helpers = __webpack_require__(13);
+	
+	var _actions = __webpack_require__(14);
 	
 	var _helpers2 = __webpack_require__(2);
 	
@@ -764,7 +754,13 @@
 		Object.keys(news).forEach(function (key) {
 			var newsType = news[key].type === 1 ? 'nz' : 'aust';
 	
-			var newPost = '\n\t\t\t<li \n\t\t\t\tclass="admin-news-item"\n\t\t\t\tdata-db-key="' + key + '"\n\t\t\t\tid="admin-news-item-' + news[key].id + '"\n\t\t\t>\n\t\t\t\t<div class="collapsible-header">\n\t\t\t\t\t<img class="admin-news-icon" src="../src/imgs/' + newsType + '-icon.png">\n\t\t\t\t\t<h3>\n\t\t\t\t\t\t' + news[key].header + '\n\t\t\t\t\t</h3>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="admin-news-edit">\n\t\t\t\t\t<button data-type="edit" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">mode_edit</i>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button data-type="delete" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">delete</i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t' + news[key].desc + '\n\t\t\t\t</div>\n\n\t\t\t</li>';
+			var newPost = '\n\t\t\t<li\n\t\t\t\tclass="admin-news-item"\n\t\t\t\tdata-db-key="' + key + '"\n\t\t\t\tid="admin-news-item-' + news[key].id + '"\n\t\t\t>\n\t\t\t\t<div class="collapsible-header">\n\t\t\t\t\t<img class="admin-news-icon" src="../src/imgs/' + newsType + '-icon.png">\n\t\t\t\t\t<h3>\n\t\t\t\t\t\t' + news[key].header + '\n\t\t\t\t\t</h3>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="admin-news-edit">\n\t\t\t\t\t<button data-type="edit" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">mode_edit</i>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button data-type="delete" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">delete</i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>';
+	
+			newPost += '\n\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t<div class="admin-news-item-content">\n\t\t\t\t\t\t' + news[key].desc + '\n\t\t\t\t\t</div>';
+	
+			if (news[key].gallery) newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\tje galerie\n\t\t\t\t\t</div>';else newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\t<button id="create-gallery" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>\n\t\t\t\t\t</div>';
+	
+			newPost += '</div></li>';
 	
 			$(newPost).appendTo(el);
 		});
@@ -796,7 +792,7 @@
 	};
 
 /***/ },
-/* 15 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -822,7 +818,7 @@
 	}
 
 /***/ },
-/* 16 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -834,7 +830,7 @@
 	
 	var _modals = __webpack_require__(8);
 	
-	var _index = __webpack_require__(14);
+	var _index = __webpack_require__(12);
 	
 	var _helpers = __webpack_require__(2);
 	
@@ -842,7 +838,8 @@
 	
 	var actionList = exports.actionList = {
 		deleteItem: deleteItem,
-		editItem: editItem
+		editItem: editItem,
+		createGallery: createGallery
 	};
 	
 	function deleteItem() {
@@ -850,6 +847,17 @@
 			(0, _helpers.createPreloader)();
 	
 			(0, _firebase.deleteSingleNewItem)($(this).closest('.admin-news-item').attr('data-db-key'));
+		});
+	}
+	
+	function createGallery() {
+		$('#create-gallery').on('click', function (e) {
+			e.preventDefault();
+	
+			(0, _modals.openModal)({
+				type: $(e.target).attr('data-type'),
+				itemKey: $(e.target).closest('.admin-news-item').attr('data-db-key')
+			});
 		});
 	}
 	
@@ -870,10 +878,88 @@
 	}
 
 /***/ },
-/* 17 */
+/* 15 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var closeModalWindow = exports.closeModalWindow = function closeModalWindow() {
+		$('body').on('click', '.modal-window-close, .modal-window-overlay', function () {
+			closeWindow();
+		});
+	};
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+	exports.postRenderFunctions = undefined;
+	
+	var _templates = __webpack_require__(3);
+	
+	var _firebase = __webpack_require__(4);
+	
+	var postRenderFunctions = exports.postRenderFunctions = {
+			createNews: createNews,
+			createGallery: createGallery
+	};
+	
+	function createNews() {
+			var opts = {
+					gallery: false
+			};
+			$('#create-new-story').on('click', function (e) {
+					e.preventDefault();
+	
+					$(_templates.preLoader).appendTo('body');
+	
+					$('.modal-window-content input').each(function (index, item) {
+							opts[$(item).attr('data-type')] = $(item).val();
+					});
+	
+					(0, _firebase.createNewsItem)(opts);
+			});
+	}
+	
+	function createGallery(itemKey) {
+			console.log(itemKey);
+			var form = $('#create-gallery-form'),
+			    input = form.find('input[type="file"]');
+	
+			form.on('submit', function (e) {
+					e.preventDefault();
+	
+					var files = input.prop('files');
+	
+					Object.keys(files).forEach(function (key) {
+							var uploadTask = _firebase.storage.ref().child('images/news/' + itemKey + '/' + files[key].name).put(files[key]);
+	
+							uploadTask.on('state_changed', null, function (error) {
+									console.error('Upload failed:', error);
+							}, function () {
+									var url = uploadTask.snapshot.metadata.downloadURLs[0];
+									console.log('File available at', url);
+							});
+					});
+	
+					// zabrani v odeslani formulare
+					return false;
+			});
+	}
 
 /***/ }
 /******/ ]);

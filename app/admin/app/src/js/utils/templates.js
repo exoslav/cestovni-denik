@@ -63,6 +63,15 @@ export let createNewsModalContent = ({
 	return template
 }
 
+export let createGallery = `
+	<div id="create-gallery-form">
+		<form>
+			<input type="file" multiple>
+			<label for="create-gallery-file">Nahrajte prosím obrázky</label>
+			<button type="submit">Nahrát</button>
+		</form>
+	</div>
+`
 export let preLoader = `
 	<div id="preloader-overpage">
 		<div id="cssload-pgloading">

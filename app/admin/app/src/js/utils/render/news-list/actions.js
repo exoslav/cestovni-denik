@@ -5,7 +5,8 @@ import { deleteSingleNewItem, getSingleNewItem } from '../../../firebase'
 
 export let actionList = {
 	deleteItem,
-	editItem
+	editItem,
+	createGallery
 }
 
 function deleteItem() {
@@ -13,6 +14,17 @@ function deleteItem() {
 		createPreloader()
 
 		deleteSingleNewItem($(this).closest('.admin-news-item').attr('data-db-key'))
+	})
+}
+
+function createGallery() {
+	$('#create-gallery').on('click', e => {
+		e.preventDefault()
+
+		openModal({
+			type: $(e.target).attr('data-type'),
+			itemKey: $(e.target).closest('.admin-news-item').attr('data-db-key')
+		})
 	})
 }
 

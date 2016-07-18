@@ -1,4 +1,5 @@
 import { lngs } from '../../../constants'
+import { storage } from '../../../firebase'
 import { handleNews } from './helpers'
 import { actionList } from './actions'
 import { callFunctionsInObject, checkAsyncFirebase } from '../../helpers'
@@ -18,7 +19,7 @@ export let renderNewsList = data => {
 		let newsType = news[key].type === 1 ? 'nz' : 'aust'
 
 		let newPost = `
-			<li 
+			<li
 				class="admin-news-item"
 				data-db-key="${key}"
 				id="admin-news-item-${news[key].id}"
@@ -37,13 +38,26 @@ export let renderNewsList = data => {
 					<button data-type="delete" class="waves-effect waves-light btn" type="button">
 						<i class="material-icons">delete</i>
 					</button>
-				</div>
-				
-				<div class="collapsible-body">
-					${news[key].desc}
-				</div>
+				</div>`
 
-			</li>`
+			newPost += `
+				<div class="collapsible-body">
+					<div class="admin-news-item-content">
+						${news[key].desc}
+					</div>`
+
+			if(news[key].gallery)
+				newPost += `
+					<div class="admin-news-item-gallery">
+						je galerie
+					</div>`
+			else
+				newPost += `
+					<div class="admin-news-item-gallery">
+						<button id="create-gallery" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>
+					</div>`
+
+			newPost += `</div></li>`
 
 		$(newPost).appendTo(el)
 	})

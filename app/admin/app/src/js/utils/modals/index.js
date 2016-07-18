@@ -1,6 +1,7 @@
 import { closeModalWindow } from './actions'
 import { postRenderFunctions } from './postRenderFunctions'
-import { createNewsModalContent } from '../templates'
+import { createNewsModalContent, createGallery } from '../templates'
+import { callFunctionsInObject } from '../helpers'
 
 let defaultOpts = {
 	header: 'modalni okno'
@@ -13,6 +14,7 @@ content - type obj
 	data pro vykresleni do template
 */
 export let openModal = (opts = {}, content) => {
+	console.log(opts)
 	removeModal()
 	opts = Object.assign(defaultOpts, opts)
 
@@ -23,13 +25,33 @@ export let openModal = (opts = {}, content) => {
 		class: 'modal'
 	})
 
-	let template
+	let template,
+	error = {
+		status: false,
+		msg: 'Modalni okno nemohlo byt vytvoreno kvuli nasledujici chybe: '
+	}
 	modalPostRenderFunctions.globalPostRenderFunction = postRenderFunction
 	switch(opts.type) {
 		case 'create-news-modal':
 			template = createNewsModalContent(content)
 			modalPostRenderFunctions.createNews = postRenderFunctions.createNews
 			break
+		case 'create-news-item-gallery':
+			if(opts.itemKey && typeof opts.itemKey === 'string') {
+				var itemKey = opts.itemKey
+			} else {
+				error.msg += 'neni k dispozici klic pro novinku'
+				error.status = true
+			}
+
+			template = createGallery
+			modalPostRenderFunctions.createGallery = () => postRenderFunctions.createGallery(opts.itemKey)
+			break
+	}
+
+	if(error.status) {
+		console.log(error.msg)
+		return false
 	}
 
 	$(template).appendTo(modalWindow)
@@ -37,10 +59,7 @@ export let openModal = (opts = {}, content) => {
 	modalWindow.appendTo('body')
 
 	// volani postrender funkci
-	Object.keys(modalPostRenderFunctions).forEach(key => {
-		if(typeof modalPostRenderFunctions[key] === 'function')
-			modalPostRenderFunctions[key]()
-	})
+	callFunctionsInObject(modalPostRenderFunctions)
 }
 
 function removeModal() {
@@ -48,8 +67,6 @@ function removeModal() {
 }
 
 function postRenderFunction() {
-	//closeModalWindow()
-	console.log('modal postRenderFunction')
 	// otevre modalni okno
   $('#modal-window').openModal()
 }

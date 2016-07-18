@@ -7,6 +7,7 @@ import { removePreloader } from './utils/helpers'
 
 export let db
 export let user
+export let storage
 
 // firebase authentication on click
 export let setFirebaseAuth = (email, password) => {
@@ -35,6 +36,25 @@ export let setUserState = (opts) => {
 
 export let setDBreference = () => {
 	db = firebase.database()
+	setStorageReference()
+
+	// // Create a reference with an initial file path and name
+	// var storage = firebase.storage();
+	// var pathReference = storage.ref('images/1.jpg');
+	//
+	// pathReference.getDownloadURL().then(function(url) {
+	//   // Get the download URL for 'images/stars.jpg'
+	//   // This can be inserted into an <img> tag
+	//   // This can also be downloaded directly
+	// }).catch(function(error) {
+	//   // Handle any errors
+	// });
+
+
+}
+
+export let setStorageReference = () => {
+	storage = firebase.storage()
 }
 
 export let createNewsItem = opts => {
@@ -56,10 +76,8 @@ export let getNews = () => {
 export let getSingleNewItem = (item, customFunction) => {
 	db.ref(`news/${item}`).once('value').then(function(data) {
 
-		if(customFunction && typeof customFunction === 'function') {
-			alert('custom function in firebase')
+		if(customFunction && typeof customFunction === 'function')
 			customFunction(data)
-		}
 
 		removePreloader()
 	})
@@ -68,7 +86,7 @@ export let getSingleNewItem = (item, customFunction) => {
 export let deleteSingleNewItem = item => {
 	db.ref(`news/${item}`).remove(function(error) {
 		let errorMsg = error ? 'Error has occured during removing process' : 'Data has been removed succesfully'
-	  
+
 	  console.log(errorMsg)
 
 	  removePreloader()
