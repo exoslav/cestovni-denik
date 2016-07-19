@@ -1,6 +1,6 @@
 import { lngs } from '../../../constants'
 import { storage } from '../../../firebase'
-import { handleNews } from './helpers'
+import { renderGallery } from './helpers'
 import { actionList } from './actions'
 import { callFunctionsInObject, checkAsyncFirebase } from '../../helpers'
 
@@ -46,17 +46,16 @@ export let renderNewsList = data => {
 						${news[key].desc}
 					</div>`
 
-			if(news[key].gallery)
-				newPost += `
-					<div class="admin-news-item-gallery">
-						je galerie
-					</div>`
-			else
+			if(typeof news[key].gallery === 'undefined')
 				newPost += `
 					<div class="admin-news-item-gallery">
 						<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>
 					</div>`
-
+			else
+				newPost += `
+					<div class="admin-news-item-gallery">
+						${renderGallery(news[key].gallery)}
+					</div>`
 			newPost += `</div></li>`
 
 		$(newPost).appendTo(el)

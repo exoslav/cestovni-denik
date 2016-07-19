@@ -69,26 +69,13 @@ export let getSingleNewItem = (item, customFunction) => {
 	})
 }
 
-export let updateSingleNewsItem = (item) => {
-	alert('updateSingleNewsItem')
-	let newData = {
-		gallery: true
-	}
-	let updates = {
-		[`news/${item}`]: newData
-	}
-	alert('updateSingleNewsItem2')
-	db.ref(`news/${item}`).update({"gallery": true}, error => {
-		if(error) {
-			alert('updateSingleNewsItem - failed')
-			console.log(`Update request failed, due to error: ${error}`)
-		}
-		else {
-			alert('updateSingleNewsItem - success')
-
+// update polozky v DB
+export let updateSingleNewsItem = (ref, data) => {
+	db.ref(ref).update(data, error => {
+		if(!error)
 			console.log(`Update request was succesfull`)
-		}
-
+		else
+			console.log(`Update request failed, due to error: ${error}`)
 	})
 }
 

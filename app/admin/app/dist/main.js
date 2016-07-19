@@ -228,8 +228,6 @@
 	
 	var _helpers = __webpack_require__(2);
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
 	var db = exports.db = void 0;
 	var user = exports.user = void 0;
 	var storage = exports.storage = void 0;
@@ -293,22 +291,10 @@
 		});
 	};
 	
-	var updateSingleNewsItem = exports.updateSingleNewsItem = function updateSingleNewsItem(item) {
-		alert('updateSingleNewsItem');
-		var newData = {
-			gallery: true
-		};
-		var updates = _defineProperty({}, 'news/' + item, newData);
-		alert('updateSingleNewsItem2');
-		db.ref('news/' + item).update({ "gallery": true }, function (error) {
-			if (error) {
-				alert('updateSingleNewsItem - failed');
-				console.log('Update request failed, due to error: ' + error);
-			} else {
-				alert('updateSingleNewsItem - success');
-	
-				console.log('Update request was succesfull');
-			}
+	// update polozky v DB
+	var updateSingleNewsItem = exports.updateSingleNewsItem = function updateSingleNewsItem(ref, data) {
+		db.ref(ref).update(data, function (error) {
+			if (!error) console.log('Update request was succesfull');else console.log('Update request failed, due to error: ' + error);
 		});
 	};
 	
@@ -661,7 +647,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-			value: true
+		value: true
 	});
 	exports.postRenderFunctions = undefined;
 	
@@ -670,59 +656,57 @@
 	var _firebase = __webpack_require__(4);
 	
 	var postRenderFunctions = exports.postRenderFunctions = {
-			createNews: createNews,
-			createGallery: createGallery
+		createNews: createNews,
+		createGallery: createGallery
 	};
 	
 	function createNews() {
-			var opts = {
-					gallery: false
-			};
-			$('#create-new-story').on('click', function (e) {
-					e.preventDefault();
+		// optiony k itemu v galrii
+		var opts = {
+			gallery: {}
+		};
+		$('#create-new-story').on('click', function (e) {
+			e.preventDefault();
 	
-					$(_templates.preLoader).appendTo('body');
+			$(_templates.preLoader).appendTo('body');
 	
-					$('.modal-window-content input').each(function (index, item) {
-							opts[$(item).attr('data-type')] = $(item).val();
-					});
-	
-					(0, _firebase.createNewsItem)(opts);
+			$('.modal-window-content input').each(function (index, item) {
+				opts[$(item).attr('data-type')] = $(item).val();
 			});
+	
+			(0, _firebase.createNewsItem)(opts);
+		});
 	}
 	
 	function createGallery(itemKey) {
-			console.log(itemKey);
-			var form = $('#create-gallery-form'),
-			    input = form.find('input[type="file"]');
+		var form = $('#create-gallery-form'),
+		    input = form.find('input[type="file"]');
 	
-			form.on('submit', function (e) {
+		form.on('submit', function (e) {
+			e.preventDefault();
 	
-					(0, _firebase.updateSingleNewsItem)(itemKey);
+			var files = input.prop('files'),
+			    storageRef = _firebase.storage.ref();
 	
-					e.preventDefault();
-					return false;
-					alert('test');
-					var files = input.prop('files');
-					var storageRef = _firebase.storage.ref();
+			Object.keys(files).forEach(function (key) {
+				var uploadTask = storageRef.child('images/news/' + itemKey + '/' + files[key].name).put(files[key]);
 	
-					Object.keys(files).forEach(function (key) {
-							var uploadTask = storageRef.child('images/news/' + itemKey + '/' + files[key].name).put(files[key]);
+				uploadTask.on('state_changed', null, function (error) {
+					console.error('Upload failed:', error);
+				}, function () {
+					console.log(uploadTask.snapshot);
+					var url = uploadTask.snapshot.metadata.downloadURLs[0],
+					    name = uploadTask.snapshot.metadata.name.replace(/\.[^/.]+$/, "");
 	
-							uploadTask.on('state_changed', null, function (error) {
-									console.error('Upload failed:', error);
-							}, function () {
-									var url = uploadTask.snapshot.metadata.downloadURLs[0];
-									(0, _firebase.getSingleNewItem)(itemKey, function () {
-											return console.log(url);
-									});
-									// console.log('File available at', url);
-							});
+					firebase.database().ref('news/' + itemKey + '/gallery/' + name).set({
+						url: url
 					});
-	
-					// zabrani v odeslani formulare
-					return false;
+				});
 			});
+	
+			// zabrani v odeslani formulare
+			return false;
+		});
 	}
 
 /***/ },
@@ -853,8 +837,7 @@
 	
 			newPost += '\n\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t<div class="admin-news-item-content">\n\t\t\t\t\t\t' + news[key].desc + '\n\t\t\t\t\t</div>';
 	
-			if (news[key].gallery) newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\tje galerie\n\t\t\t\t\t</div>';else newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\t<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>\n\t\t\t\t\t</div>';
-	
+			if (typeof news[key].gallery === 'undefined') newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\t<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>\n\t\t\t\t\t</div>';else newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\t' + (0, _helpers.renderGallery)(news[key].gallery) + '\n\t\t\t\t\t</div>';
 			newPost += '</div></li>';
 	
 			$(newPost).appendTo(el);
@@ -895,22 +878,14 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	var handleNews = exports.handleNews = function handleNews(data, selector) {
-		/*
-	 $('body').on('click', `.${selector}-item`, e => {
-	 	e.preventDefault()
-	 
-	 	renderNewsDetailContent(data, selector, $(e.target))
-	 })
-	 */
+	var renderGallery = exports.renderGallery = function renderGallery(gallery) {
+		var block = '';
+		Object.keys(gallery).forEach(function (key) {
+			block += '\n\t\t\t<div>\n\t\t\t\t' + key + '\n\t\t\t</div>\n\t\t\t<img src="' + gallery[key].url + '">';
+		});
+	
+		return block;
 	};
-	
-	function renderNewsDetailContent(data, selector, item) {
-		var itemData = data[item.attr('data-db-key')],
-		    itemTemplate = $('\n\t\t\t<div class="' + selector + '-detail">\n\t\t\t\t<span class="' + selector + '-detail-date">' + itemData.date + '</span>\n\t\t\t\t<div class="' + selector + '-detail-annotation">' + itemData.desc + '</div>\n\t\t\t\t<div class="' + selector + '-detail-content">' + itemData.content + '</div>\n\t\t\t</div>');
-	
-		openModal({ header: itemData.header }, itemTemplate);
-	}
 
 /***/ },
 /* 16 */
