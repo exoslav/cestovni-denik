@@ -54,7 +54,7 @@ export let renderNewsList = data => {
 			else
 				newPost += `
 					<div class="admin-news-item-gallery">
-						<button id="create-gallery" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>
+						<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>
 					</div>`
 
 			newPost += `</div></li>`

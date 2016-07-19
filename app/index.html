@@ -7,7 +7,7 @@
   <meta name="keywords" content="Cestování, blog, Jiří Tojnar, Nový Zéland, příroda, volno, dovolená">
   <meta name="author" content="Martin Nikl">
 	<meta name="viewport" content="width=device-width">
-	
+
 	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
 	<link href="http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
@@ -15,106 +15,10 @@
   <link rel="stylesheet" href="/dist/main.css">
 
 	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-	<script>
-	$(document).ready(function() {
-	  // Initialize Firebase
-	  var config = {
-	    apiKey: "AIzaSyDVxtKl-WYUE_y-kJOyIVEqqCmtznCRQH0",
-	    authDomain: "tutorial-8fb62.firebaseapp.com",
-	    databaseURL: "https://tutorial-8fb62.firebaseio.com",
-	    storageBucket: "tutorial-8fb62.appspot.com",
-	  };
-	  firebase.initializeApp(config);
-
-	  console.log(firebase.auth().currentUser);
-
-		firebase.auth().signOut().then(function() {
-		  // Sign-out successful.
-		}, function(error) {
-		  // An error happened.
-		});
-
-		function handleAuth() {
-			var email = 'm.nikl@seznam.cz';
-			var password = 'xx206xt';
-
-			firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-			  // Handle Errors here.
-			  var errorCode = error.code;
-			  var errorMessage = error.message;
-
-        if (errorCode === 'auth/wrong-password') {
-          alert('Wrong password.');
-        } else {
-          console.error(error);
-        }
-			});
-		}
-
-		$('#auth').on('click', function() {
-			handleAuth();
-		})
-
-		firebase.auth().onAuthStateChanged(function(user) {
-		  if (user) {
-		    console.log(user.email)
-		  } else {
-		    console.log('no user is sign in')
-		  }
-		});
-		
-		var database = firebase.database();
-
-		function writeUserData(userId, name, email) {
-		  firebase.database().ref('news/' + userId).set({
-		    username: name,
-		    email: email
-		  });
-		}
-
-		writeUserData('novinka', 'martin', 'm.nikl@seznam.cz')
-
-		firebase.database().ref('news/novinka').on('value', function(data) {
-		  console.log(data.val());
-		});
-	})
-	</script>
 </head>
 
-<body>
-	<div id="header" class="clearfix">
-		<div class="container clearfix">
-			<a id="logo" href="http://cestovni-denik.cz/"><img src="http://cestovni-denik.cz/source/pictures/logo.png" alt="Domů"></a>
-
-			<nav id="menu-main" class="hidden-phone">
-				<ul>
-					<li class="">
-						<a href="#onas">O nás</a>
-					</li>
-					<li class="">
-						<a href="#nasepribehy">Nový Zéland</a>
-					</li>
-					<li class="">
-						<a href="http://cestovni-denik.cz/cestujeme-po-evrope">Cestujeme po Evropě</a></li>
-				</ul>
-			</nav>
-
-		</div>
-	</div>
-
-	<div id="welcome-block">
-		<div class="container">
-			<div class="row">
-				<div id="main-desc" class="span6">
-					<div>
-					<h1>Cestujeme po Novém Zélandu</h1>
-					<p>Pojďte se s námi podívat na druhý konec světa.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<button id="auth" type="button">Prihlaseni</button>
+  <body>
+    <div id="app"></div>
 	</body>
+  <script src="dist/main.js"></script>
 </html>

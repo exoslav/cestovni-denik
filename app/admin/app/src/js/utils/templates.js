@@ -68,7 +68,7 @@ export let createGallery = `
 		<form>
 			<input type="file" multiple>
 			<label for="create-gallery-file">Nahrajte prosím obrázky</label>
-			<button type="submit">Nahrát</button>
+			<button class="waves-effect waves-light btn" type="submit">Nahrát</button>
 		</form>
 	</div>
 `

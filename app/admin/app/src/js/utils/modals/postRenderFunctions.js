@@ -1,5 +1,5 @@
 import { preLoader } from '../templates'
-import { createNewsItem, storage } from '../../firebase'
+import { storage, createNewsItem, getSingleNewItem, updateSingleNewsItem } from '../../firebase'
 
 export let postRenderFunctions = {
 	createNews,
@@ -29,18 +29,24 @@ function createGallery(itemKey) {
 			input = form.find('input[type="file"]')
 
 	form.on('submit', e => {
-		e.preventDefault()
 
+		updateSingleNewsItem(itemKey)
+
+		e.preventDefault()
+		return false
+		alert('test')
 		let files = input.prop('files')
+		let storageRef = storage.ref()
 
 		Object.keys(files).forEach(key => {
-      let uploadTask = storage.ref().child(`images/news/${itemKey}/${files[key].name}`).put(files[key]);
+      let uploadTask = storageRef.child(`images/news/${itemKey}/${files[key].name}`).put(files[key]);
 
-      uploadTask.on('state_changed', null, function(error) {
+      uploadTask.on('state_changed', null, error => {
         console.error('Upload failed:', error);
-      }, function() {
-        var url = uploadTask.snapshot.metadata.downloadURLs[0];
-        console.log('File available at', url);
+      }, () => {
+				var url = uploadTask.snapshot.metadata.downloadURLs[0];
+				getSingleNewItem(itemKey, () => console.log(url))
+        // console.log('File available at', url);
       });
 		})
 

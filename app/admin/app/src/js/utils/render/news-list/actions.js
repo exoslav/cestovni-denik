@@ -18,7 +18,7 @@ function deleteItem() {
 }
 
 function createGallery() {
-	$('#create-gallery').on('click', e => {
+	$('.create-gallery').on('click', e => {
 		e.preventDefault()
 
 		openModal({

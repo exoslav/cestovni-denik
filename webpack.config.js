@@ -37,7 +37,7 @@ module.exports = (function(env) {
     */
     // jeden svtupni soubor:
     entry: {
-      base: basePath + 'src/js/main.js' // vstupni soubor pro webpacku
+      base: basePath + 'src/js/main.jsx' // vstupni soubor pro webpacku
     },
     output: {
       path: './app/dist', // kam se buodu vysledne soubory ukladat
@@ -60,7 +60,15 @@ module.exports = (function(env) {
         {
           test: /\.jpg$/,
           loader: "url-loader?limit=10000&minetype=image/jpg"
-        }
+        },
+        {
+          test: /\.jsx?$/,
+          exclude: /(node_modules)/,
+          loader: 'babel', // 'babel-loader' is also a legal name to reference
+          query: {
+            presets: ['es2015', 'react']
+          }
+        },
         /*
         {
           test: /\.scss$/,

@@ -37,20 +37,6 @@ export let setUserState = (opts) => {
 export let setDBreference = () => {
 	db = firebase.database()
 	setStorageReference()
-
-	// // Create a reference with an initial file path and name
-	// var storage = firebase.storage();
-	// var pathReference = storage.ref('images/1.jpg');
-	//
-	// pathReference.getDownloadURL().then(function(url) {
-	//   // Get the download URL for 'images/stars.jpg'
-	//   // This can be inserted into an <img> tag
-	//   // This can also be downloaded directly
-	// }).catch(function(error) {
-	//   // Handle any errors
-	// });
-
-
 }
 
 export let setStorageReference = () => {
@@ -80,6 +66,29 @@ export let getSingleNewItem = (item, customFunction) => {
 			customFunction(data)
 
 		removePreloader()
+	})
+}
+
+export let updateSingleNewsItem = (item) => {
+	alert('updateSingleNewsItem')
+	let newData = {
+		gallery: true
+	}
+	let updates = {
+		[`news/${item}`]: newData
+	}
+	alert('updateSingleNewsItem2')
+	db.ref(`news/${item}`).update({"gallery": true}, error => {
+		if(error) {
+			alert('updateSingleNewsItem - failed')
+			console.log(`Update request failed, due to error: ${error}`)
+		}
+		else {
+			alert('updateSingleNewsItem - success')
+
+			console.log(`Update request was succesfull`)
+		}
+
 	})
 }
 

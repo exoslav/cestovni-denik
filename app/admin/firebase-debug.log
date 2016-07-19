@@ -194,3 +194,31 @@
 [info] Public Directory: ./app
 [info] 
 [info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\exoslav\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] CLI Version:  3.0.4
+[debug] Platform:     win32
+[debug] Node Version: v4.4.7
+[debug] Time:         Mon Jul 18 2016 20:19:35 GMT+0200 (Střední Evropa (letní čas))
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: f:\web\projects\cestovni-denik
+[info] Public Directory: ./app
+[info] 
+[info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\exoslav\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] CLI Version:  3.0.4
+[debug] Platform:     win32
+[debug] Node Version: v4.4.7
+[debug] Time:         Mon Jul 18 2016 21:55:01 GMT+0200 (Střední Evropa (letní čas))
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: f:\web\projects\cestovni-denik
+[info] Public Directory: ./app
+[info] 
+[info] Server listening at: http://localhost:5000

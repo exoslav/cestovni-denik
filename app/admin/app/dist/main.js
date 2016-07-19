@@ -52,7 +52,7 @@
 	
 	var _helpers = __webpack_require__(2);
 	
-	__webpack_require__(15);
+	__webpack_require__(17);
 	
 	
 	window.adminInit = function () {
@@ -202,7 +202,7 @@
 		return template;
 	};
 	
-	var createGallery = exports.createGallery = '\n\t<div id="create-gallery-form">\n\t\t<form>\n\t\t\t<input type="file" multiple>\n\t\t\t<label for="create-gallery-file">Nahrajte prosím obrázky</label>\n\t\t\t<button type="submit">Nahrát</button>\n\t\t</form>\n\t</div>\n';
+	var createGallery = exports.createGallery = '\n\t<div id="create-gallery-form">\n\t\t<form>\n\t\t\t<input type="file" multiple>\n\t\t\t<label for="create-gallery-file">Nahrajte prosím obrázky</label>\n\t\t\t<button class="waves-effect waves-light btn" type="submit">Nahrát</button>\n\t\t</form>\n\t</div>\n';
 	var preLoader = exports.preLoader = '\n\t<div id="preloader-overpage">\n\t\t<div id="cssload-pgloading">\n\t\t\t<div class="cssload-loadingwrap">\n\t\t\t\t<ul class="cssload-bokeh">\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t\t<li></li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n';
 
 /***/ },
@@ -214,19 +214,21 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.getPosition = exports.getWelcomeText = exports.deleteSingleNewItem = exports.getSingleNewItem = exports.getNews = exports.createNewsItem = exports.setStorageReference = exports.setDBreference = exports.setUserState = exports.setFirebaseAuth = exports.storage = exports.user = exports.db = undefined;
+	exports.getPosition = exports.getWelcomeText = exports.deleteSingleNewItem = exports.updateSingleNewsItem = exports.getSingleNewItem = exports.getNews = exports.createNewsItem = exports.setStorageReference = exports.setDBreference = exports.setUserState = exports.setFirebaseAuth = exports.storage = exports.user = exports.db = undefined;
 	
 	var _formLogin = __webpack_require__(5);
 	
 	var _administration = __webpack_require__(6);
 	
-	var _index = __webpack_require__(9);
+	var _index = __webpack_require__(11);
 	
-	var _index2 = __webpack_require__(11);
+	var _index2 = __webpack_require__(13);
 	
-	var _index3 = __webpack_require__(12);
+	var _index3 = __webpack_require__(14);
 	
 	var _helpers = __webpack_require__(2);
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	var db = exports.db = void 0;
 	var user = exports.user = void 0;
@@ -260,18 +262,6 @@
 	var setDBreference = exports.setDBreference = function setDBreference() {
 		exports.db = db = firebase.database();
 		setStorageReference();
-	
-		// // Create a reference with an initial file path and name
-		// var storage = firebase.storage();
-		// var pathReference = storage.ref('images/1.jpg');
-		//
-		// pathReference.getDownloadURL().then(function(url) {
-		//   // Get the download URL for 'images/stars.jpg'
-		//   // This can be inserted into an <img> tag
-		//   // This can also be downloaded directly
-		// }).catch(function(error) {
-		//   // Handle any errors
-		// });
 	};
 	
 	var setStorageReference = exports.setStorageReference = function setStorageReference() {
@@ -300,6 +290,25 @@
 			if (customFunction && typeof customFunction === 'function') customFunction(data);
 	
 			(0, _helpers.removePreloader)();
+		});
+	};
+	
+	var updateSingleNewsItem = exports.updateSingleNewsItem = function updateSingleNewsItem(item) {
+		alert('updateSingleNewsItem');
+		var newData = {
+			gallery: true
+		};
+		var updates = _defineProperty({}, 'news/' + item, newData);
+		alert('updateSingleNewsItem2');
+		db.ref('news/' + item).update({ "gallery": true }, function (error) {
+			if (error) {
+				alert('updateSingleNewsItem - failed');
+				console.log('Update request failed, due to error: ' + error);
+			} else {
+				alert('updateSingleNewsItem - success');
+	
+				console.log('Update request was succesfull');
+			}
 		});
 	};
 	
@@ -549,9 +558,9 @@
 	});
 	exports.openModal = undefined;
 	
-	var _actions = __webpack_require__(16);
+	var _actions = __webpack_require__(9);
 	
-	var _postRenderFunctions = __webpack_require__(17);
+	var _postRenderFunctions = __webpack_require__(10);
 	
 	var _templates = __webpack_require__(3);
 	
@@ -632,259 +641,6 @@
 
 /***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.renderWelcomeText = undefined;
-	
-	var _renderUi = __webpack_require__(10);
-	
-	var _renderUi2 = _interopRequireDefault(_renderUi);
-	
-	var _helpers = __webpack_require__(2);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var renderWelcomeText = exports.renderWelcomeText = function renderWelcomeText(data) {
-		var selector = 'admin-welcome-text',
-		    welcomeText = data,
-		    el = '\n\t\t\t\t<div class="editable welcome-text">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="welcomeText"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + welcomeText.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="welcomeText"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + welcomeText.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>';
-	
-		$('.' + selector + '-preloader').remove();
-		$(el).appendTo('#' + selector);
-	
-		(0, _renderUi2.default)(selector);
-	
-		(0, _helpers.checkAsyncFirebase)();
-	};
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.default = renderUI;
-	
-	var _constants = __webpack_require__(1);
-	
-	function renderUI(selector) {
-		$('#' + selector).find('.editable').each(function (index, item) {
-			var UI = $('<button/>', {
-				class: 'waves-effect waves-light btn ui-edit ui-edit-' + selector,
-				text: _constants.lngs.admin.edit,
-				type: 'button'
-			});
-	
-			UI.appendTo($(item));
-		});
-	}
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.renderPosition = undefined;
-	
-	var _renderUi = __webpack_require__(10);
-	
-	var _renderUi2 = _interopRequireDefault(_renderUi);
-	
-	var _helpers = __webpack_require__(2);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var renderPosition = exports.renderPosition = function renderPosition(data) {
-		var selector = 'admin-position',
-		    position = data,
-		    el = '\n\t\t\t<div>\n\t\t\t\t<div class="editable where-we-are">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="position/whereWeAre"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeAre.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="position/whereWeAre"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeAre.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="editable where-we-go">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="position/whereWeGo"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeGo.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="position/whereWeGo"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeGo.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>\n\t\t\t</div>';
-	
-		$('.' + selector + '-preloader').remove();
-		$(el).appendTo('#' + selector);
-	
-		(0, _renderUi2.default)(selector);
-	
-		(0, _helpers.checkAsyncFirebase)();
-	};
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.renderNewsList = exports.isDeleteEventsBinded = undefined;
-	
-	var _constants = __webpack_require__(1);
-	
-	var _firebase = __webpack_require__(4);
-	
-	var _helpers = __webpack_require__(13);
-	
-	var _actions = __webpack_require__(14);
-	
-	var _helpers2 = __webpack_require__(2);
-	
-	var isDeleteEventsBinded = exports.isDeleteEventsBinded = false;
-	
-	var renderNewsList = exports.renderNewsList = function renderNewsList(data) {
-		var selector = 'admin-news',
-		    news = data,
-		    el = $('<ul/>', {
-			class: 'collapsible popout collapsible-accordion'
-		});
-	
-		$('#' + selector).empty();
-	
-		Object.keys(news).forEach(function (key) {
-			var newsType = news[key].type === 1 ? 'nz' : 'aust';
-	
-			var newPost = '\n\t\t\t<li\n\t\t\t\tclass="admin-news-item"\n\t\t\t\tdata-db-key="' + key + '"\n\t\t\t\tid="admin-news-item-' + news[key].id + '"\n\t\t\t>\n\t\t\t\t<div class="collapsible-header">\n\t\t\t\t\t<img class="admin-news-icon" src="../src/imgs/' + newsType + '-icon.png">\n\t\t\t\t\t<h3>\n\t\t\t\t\t\t' + news[key].header + '\n\t\t\t\t\t</h3>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="admin-news-edit">\n\t\t\t\t\t<button data-type="edit" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">mode_edit</i>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button data-type="delete" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">delete</i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>';
-	
-			newPost += '\n\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t<div class="admin-news-item-content">\n\t\t\t\t\t\t' + news[key].desc + '\n\t\t\t\t\t</div>';
-	
-			if (news[key].gallery) newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\tje galerie\n\t\t\t\t\t</div>';else newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\t<button id="create-gallery" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>\n\t\t\t\t\t</div>';
-	
-			newPost += '</div></li>';
-	
-			$(newPost).appendTo(el);
-		});
-	
-		$('.' + selector + '-preloader').remove();
-	
-		$('<h2/>', {
-			text: _constants.lngs.admin.ourStories
-		}).appendTo('#' + selector);
-		$('<a/>', {
-			id: 'new-story',
-			class: 'waves-effect waves-light btn modal-trigger',
-			'data-modal-type': 'create-news-modal',
-			href: '#modal1',
-			text: 'nový příběh'
-		}).appendTo('#' + selector);
-	
-		$(el).appendTo('#' + selector);
-	
-		(0, _helpers2.callFunctionsInObject)(_actions.actionList);
-	
-		$(document).ready(function () {
-			$('.collapsible').collapsible({
-				accordion: false
-			});
-		});
-	
-		(0, _helpers2.checkAsyncFirebase)();
-	};
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	var handleNews = exports.handleNews = function handleNews(data, selector) {
-		/*
-	 $('body').on('click', `.${selector}-item`, e => {
-	 	e.preventDefault()
-	 
-	 	renderNewsDetailContent(data, selector, $(e.target))
-	 })
-	 */
-	};
-	
-	function renderNewsDetailContent(data, selector, item) {
-		var itemData = data[item.attr('data-db-key')],
-		    itemTemplate = $('\n\t\t\t<div class="' + selector + '-detail">\n\t\t\t\t<span class="' + selector + '-detail-date">' + itemData.date + '</span>\n\t\t\t\t<div class="' + selector + '-detail-annotation">' + itemData.desc + '</div>\n\t\t\t\t<div class="' + selector + '-detail-content">' + itemData.content + '</div>\n\t\t\t</div>');
-	
-		openModal({ header: itemData.header }, itemTemplate);
-	}
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.actionList = undefined;
-	
-	var _modals = __webpack_require__(8);
-	
-	var _index = __webpack_require__(12);
-	
-	var _helpers = __webpack_require__(2);
-	
-	var _firebase = __webpack_require__(4);
-	
-	var actionList = exports.actionList = {
-		deleteItem: deleteItem,
-		editItem: editItem,
-		createGallery: createGallery
-	};
-	
-	function deleteItem() {
-		$('.admin-news-edit [data-type="delete"]').on('click', function () {
-			(0, _helpers.createPreloader)();
-	
-			(0, _firebase.deleteSingleNewItem)($(this).closest('.admin-news-item').attr('data-db-key'));
-		});
-	}
-	
-	function createGallery() {
-		$('#create-gallery').on('click', function (e) {
-			e.preventDefault();
-	
-			(0, _modals.openModal)({
-				type: $(e.target).attr('data-type'),
-				itemKey: $(e.target).closest('.admin-news-item').attr('data-db-key')
-			});
-		});
-	}
-	
-	function editItem() {
-		$('.admin-news-edit [data-type="edit"]').on('click', function () {
-			(0, _helpers.createPreloader)();
-	
-			var customFunction = function customFunction(data) {
-				(0, _modals.openModal)({
-					type: 'create-news-modal'
-				}, data.val());
-			};
-	
-			var id = $(this).closest('.admin-news-item').attr('data-db-key');
-	
-			(0, _firebase.getSingleNewItem)(id, customFunction);
-		});
-	}
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -899,7 +655,7 @@
 	};
 
 /***/ },
-/* 17 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -941,18 +697,26 @@
 			    input = form.find('input[type="file"]');
 	
 			form.on('submit', function (e) {
-					e.preventDefault();
 	
+					(0, _firebase.updateSingleNewsItem)(itemKey);
+	
+					e.preventDefault();
+					return false;
+					alert('test');
 					var files = input.prop('files');
+					var storageRef = _firebase.storage.ref();
 	
 					Object.keys(files).forEach(function (key) {
-							var uploadTask = _firebase.storage.ref().child('images/news/' + itemKey + '/' + files[key].name).put(files[key]);
+							var uploadTask = storageRef.child('images/news/' + itemKey + '/' + files[key].name).put(files[key]);
 	
 							uploadTask.on('state_changed', null, function (error) {
 									console.error('Upload failed:', error);
 							}, function () {
 									var url = uploadTask.snapshot.metadata.downloadURLs[0];
-									console.log('File available at', url);
+									(0, _firebase.getSingleNewItem)(itemKey, function () {
+											return console.log(url);
+									});
+									// console.log('File available at', url);
 							});
 					});
 	
@@ -960,6 +724,259 @@
 					return false;
 			});
 	}
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.renderWelcomeText = undefined;
+	
+	var _renderUi = __webpack_require__(12);
+	
+	var _renderUi2 = _interopRequireDefault(_renderUi);
+	
+	var _helpers = __webpack_require__(2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var renderWelcomeText = exports.renderWelcomeText = function renderWelcomeText(data) {
+		var selector = 'admin-welcome-text',
+		    welcomeText = data,
+		    el = '\n\t\t\t\t<div class="editable welcome-text">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="welcomeText"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + welcomeText.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="welcomeText"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + welcomeText.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>';
+	
+		$('.' + selector + '-preloader').remove();
+		$(el).appendTo('#' + selector);
+	
+		(0, _renderUi2.default)(selector);
+	
+		(0, _helpers.checkAsyncFirebase)();
+	};
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = renderUI;
+	
+	var _constants = __webpack_require__(1);
+	
+	function renderUI(selector) {
+		$('#' + selector).find('.editable').each(function (index, item) {
+			var UI = $('<button/>', {
+				class: 'waves-effect waves-light btn ui-edit ui-edit-' + selector,
+				text: _constants.lngs.admin.edit,
+				type: 'button'
+			});
+	
+			UI.appendTo($(item));
+		});
+	}
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.renderPosition = undefined;
+	
+	var _renderUi = __webpack_require__(12);
+	
+	var _renderUi2 = _interopRequireDefault(_renderUi);
+	
+	var _helpers = __webpack_require__(2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var renderPosition = exports.renderPosition = function renderPosition(data) {
+		var selector = 'admin-position',
+		    position = data,
+		    el = '\n\t\t\t<div>\n\t\t\t\t<div class="editable where-we-are">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="position/whereWeAre"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeAre.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="position/whereWeAre"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeAre.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="editable where-we-go">\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="header"\n\t\t\t\t\t\tdata-db-path="position/whereWeGo"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeGo.header + '"\n\t\t\t\t\t>\n\t\t\t\t\t<input\n\t\t\t\t\t\tdisabled\n\t\t\t\t\t\tdata-db-key="desc"\n\t\t\t\t\t\tdata-db-path="position/whereWeGo"\n\t\t\t\t\t\tdata-editable-save="true"\n\t\t\t\t\t\tvalue="' + position.whereWeGo.desc + '"\n\t\t\t\t\t>\n\t\t\t\t</div>\n\t\t\t</div>';
+	
+		$('.' + selector + '-preloader').remove();
+		$(el).appendTo('#' + selector);
+	
+		(0, _renderUi2.default)(selector);
+	
+		(0, _helpers.checkAsyncFirebase)();
+	};
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.renderNewsList = exports.isDeleteEventsBinded = undefined;
+	
+	var _constants = __webpack_require__(1);
+	
+	var _firebase = __webpack_require__(4);
+	
+	var _helpers = __webpack_require__(15);
+	
+	var _actions = __webpack_require__(16);
+	
+	var _helpers2 = __webpack_require__(2);
+	
+	var isDeleteEventsBinded = exports.isDeleteEventsBinded = false;
+	
+	var renderNewsList = exports.renderNewsList = function renderNewsList(data) {
+		var selector = 'admin-news',
+		    news = data,
+		    el = $('<ul/>', {
+			class: 'collapsible popout collapsible-accordion'
+		});
+	
+		$('#' + selector).empty();
+	
+		Object.keys(news).forEach(function (key) {
+			var newsType = news[key].type === 1 ? 'nz' : 'aust';
+	
+			var newPost = '\n\t\t\t<li\n\t\t\t\tclass="admin-news-item"\n\t\t\t\tdata-db-key="' + key + '"\n\t\t\t\tid="admin-news-item-' + news[key].id + '"\n\t\t\t>\n\t\t\t\t<div class="collapsible-header">\n\t\t\t\t\t<img class="admin-news-icon" src="../src/imgs/' + newsType + '-icon.png">\n\t\t\t\t\t<h3>\n\t\t\t\t\t\t' + news[key].header + '\n\t\t\t\t\t</h3>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="admin-news-edit">\n\t\t\t\t\t<button data-type="edit" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">mode_edit</i>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button data-type="delete" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">delete</i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>';
+	
+			newPost += '\n\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t<div class="admin-news-item-content">\n\t\t\t\t\t\t' + news[key].desc + '\n\t\t\t\t\t</div>';
+	
+			if (news[key].gallery) newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\tje galerie\n\t\t\t\t\t</div>';else newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\t<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>\n\t\t\t\t\t</div>';
+	
+			newPost += '</div></li>';
+	
+			$(newPost).appendTo(el);
+		});
+	
+		$('.' + selector + '-preloader').remove();
+	
+		$('<h2/>', {
+			text: _constants.lngs.admin.ourStories
+		}).appendTo('#' + selector);
+		$('<a/>', {
+			id: 'new-story',
+			class: 'waves-effect waves-light btn modal-trigger',
+			'data-modal-type': 'create-news-modal',
+			href: '#modal1',
+			text: 'nový příběh'
+		}).appendTo('#' + selector);
+	
+		$(el).appendTo('#' + selector);
+	
+		(0, _helpers2.callFunctionsInObject)(_actions.actionList);
+	
+		$(document).ready(function () {
+			$('.collapsible').collapsible({
+				accordion: false
+			});
+		});
+	
+		(0, _helpers2.checkAsyncFirebase)();
+	};
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var handleNews = exports.handleNews = function handleNews(data, selector) {
+		/*
+	 $('body').on('click', `.${selector}-item`, e => {
+	 	e.preventDefault()
+	 
+	 	renderNewsDetailContent(data, selector, $(e.target))
+	 })
+	 */
+	};
+	
+	function renderNewsDetailContent(data, selector, item) {
+		var itemData = data[item.attr('data-db-key')],
+		    itemTemplate = $('\n\t\t\t<div class="' + selector + '-detail">\n\t\t\t\t<span class="' + selector + '-detail-date">' + itemData.date + '</span>\n\t\t\t\t<div class="' + selector + '-detail-annotation">' + itemData.desc + '</div>\n\t\t\t\t<div class="' + selector + '-detail-content">' + itemData.content + '</div>\n\t\t\t</div>');
+	
+		openModal({ header: itemData.header }, itemTemplate);
+	}
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.actionList = undefined;
+	
+	var _modals = __webpack_require__(8);
+	
+	var _index = __webpack_require__(14);
+	
+	var _helpers = __webpack_require__(2);
+	
+	var _firebase = __webpack_require__(4);
+	
+	var actionList = exports.actionList = {
+		deleteItem: deleteItem,
+		editItem: editItem,
+		createGallery: createGallery
+	};
+	
+	function deleteItem() {
+		$('.admin-news-edit [data-type="delete"]').on('click', function () {
+			(0, _helpers.createPreloader)();
+	
+			(0, _firebase.deleteSingleNewItem)($(this).closest('.admin-news-item').attr('data-db-key'));
+		});
+	}
+	
+	function createGallery() {
+		$('.create-gallery').on('click', function (e) {
+			e.preventDefault();
+	
+			(0, _modals.openModal)({
+				type: $(e.target).attr('data-type'),
+				itemKey: $(e.target).closest('.admin-news-item').attr('data-db-key')
+			});
+		});
+	}
+	
+	function editItem() {
+		$('.admin-news-edit [data-type="edit"]').on('click', function () {
+			(0, _helpers.createPreloader)();
+	
+			var customFunction = function customFunction(data) {
+				(0, _modals.openModal)({
+					type: 'create-news-modal'
+				}, data.val());
+			};
+	
+			var id = $(this).closest('.admin-news-item').attr('data-db-key');
+	
+			(0, _firebase.getSingleNewItem)(id, customFunction);
+		});
+	}
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);
