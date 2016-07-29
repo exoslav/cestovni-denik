@@ -1,7 +1,9 @@
 import { preLoader } from '../templates'
-import { db, storage, createNewsItem, getSingleNewItem, updateSingleNewsItem } from '../../firebase'
+import { storeNewsItemKey } from '../render/news-list/helpers'
+import { db, storage, createNewsItem, editNewsItem, getSingleNewItem, updateSingleNewsItem } from '../../firebase'
 
 export let postRenderFunctions = {
+	editNews,
 	createNews,
 	createGallery
 }
@@ -11,16 +13,41 @@ function createNews() {
 	let opts = {
 		gallery: {}
 	}
-	$('#create-new-story').on('click', e => {
+	$('#news-modal-submit').on('click', e => {
 		e.preventDefault()
 
 		$(preLoader).appendTo('body')
 
 		$('.modal-window-content input').each((index, item) => {
-			opts[$(item).attr('data-type')] = $(item).val()
+			let val = $(item).val()
+
+			if($(item).attr('data-type') === 'date')
+				opts['dateStamp'] = -createTimeStamp($(item).val()) // je zaporny kvuli vypisu z firebase
+
+			opts[$(item).attr('data-type')] = val
 		})
 
 		createNewsItem(opts)
+	})
+}
+
+function editNews() {
+	$('#news-modal-submit').on('click', e => {
+		e.preventDefault()
+		let opts = {}
+
+		$(preLoader).appendTo('body')
+
+		$('.modal-window-content input').each((index, item) => {
+			let val = $(item).val()
+
+			if($(item).attr('data-type') === 'date')
+				opts['dateStamp'] = -createTimeStamp($(item).val()) // je zaporny kvuli vypisu z firebase
+
+			opts[$(item).attr('data-type')] = val
+		})
+
+		editNewsItem(opts, storeNewsItemKey)
 	})
 }
 
@@ -53,4 +80,12 @@ function createGallery(itemKey) {
 		// zabrani v odeslani formulare
 		return false
 	})
+}
+
+function createTimeStamp(dateFromInput) {
+	let date = new Date(),
+			currentDate = `${dateFromInput}`.split(".")
+			// currentDate = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`.split("-")
+
+	return new Date(`${currentDate[1]}/${currentDate[0]}/${currentDate[2]}`).getTime()
 }

@@ -32,14 +32,15 @@ export let administration = lngs => {
 	`
 }
 
-export let createNewsModalContent = ({
+export let newsModalContent = ({
 	modalHeader = 'Vytvoření novinky',
 	header = 'Název příběhu',
 	date = 'Datum',
 	lat = 'Lat',
 	lng = 'Lng',
 	annotation = 'Anotace',
-	content = 'Obsah'
+	content = 'Obsah',
+	submit = 'Vytvořit novinku'
 }) => {
 	let template = `
 		<div class="modal-window-header">
@@ -56,7 +57,7 @@ export let createNewsModalContent = ({
 		</div>
 
 		<div class="modal-window-footer">
-			<button id="create-new-story" class="waves-effect waves-light btn" type="button">Vytvořit novinku</button>
+			<button id="news-modal-submit" class="waves-effect waves-light btn" type="button">${submit}</button>
 		</div>
 	`
 

@@ -1,12 +1,14 @@
 import { openModal } from '../../modals'
 import { isDeleteEventsBinded, setDeleteEvent } from './index'
+import { renderGallery, setStoreNewsItemKey } from './helpers'
 import { createPreloader } from '../../helpers'
 import { deleteSingleNewItem, getSingleNewItem } from '../../../firebase'
 
 export let actionList = {
 	deleteItem,
 	editItem,
-	createGallery
+	createGallery,
+	openGallery
 }
 
 function deleteItem() {
@@ -17,6 +19,7 @@ function deleteItem() {
 	})
 }
 
+// modalni okno s vytvorenim nove galerie
 function createGallery() {
 	$('.create-gallery').on('click', e => {
 		e.preventDefault()
@@ -28,15 +31,31 @@ function createGallery() {
 	})
 }
 
+// otevre galerii kdyz jiz existuje u novinky
+function openGallery() {
+	$('.open-gallery').on('click', e => {
+		e.preventDefault()
+
+		let itemKey = $(e.target).closest('.admin-news-item').attr('data-db-key')
+
+		$(renderGallery(itemKey)).appendTo($(e.target).closest('.admin-news-item-gallery'))
+	})
+}
+
 function editItem() {
 	$('.admin-news-edit [data-type="edit"]').on('click', function() {
 		createPreloader()
 
+		let itemKey = $(this).closest('.admin-news-item').attr('data-db-key')
+		setStoreNewsItemKey(itemKey)
+
 		let customFunction = data => {
+			let content = data.val()
+			content.submit = 'Změnit'
 			openModal({
-				type: 'create-news-modal'
+				type: 'edit-news-modal'
 			},
-			data.val())
+			content)
 		}
 
 		let id = $(this).closest('.admin-news-item').attr('data-db-key')

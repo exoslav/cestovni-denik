@@ -1,6 +1,6 @@
 import { closeModalWindow } from './actions'
 import { postRenderFunctions } from './postRenderFunctions'
-import { createNewsModalContent, createGallery } from '../templates'
+import { newsModalContent, createGallery } from '../templates'
 import { callFunctionsInObject } from '../helpers'
 
 let defaultOpts = {
@@ -33,8 +33,12 @@ export let openModal = (opts = {}, content) => {
 	modalPostRenderFunctions.globalPostRenderFunction = postRenderFunction
 	switch(opts.type) {
 		case 'create-news-modal':
-			template = createNewsModalContent(content)
+			template = newsModalContent(content)
 			modalPostRenderFunctions.createNews = postRenderFunctions.createNews
+			break
+		case 'edit-news-modal':
+			template = newsModalContent(content)
+			modalPostRenderFunctions.editNews = postRenderFunctions.editNews
 			break
 		case 'create-news-item-gallery':
 			if(opts.itemKey && typeof opts.itemKey === 'string') {

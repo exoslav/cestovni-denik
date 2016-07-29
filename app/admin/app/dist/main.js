@@ -181,7 +181,7 @@
 		return '\n\t<header>\n\t\t<div>\n\t\t\t<div class="container">\n\t\t\t\t<div class="project-name">\n\t\t\t\t\t<h1>www.' + lngs.globals.projectName + '.cz</h1>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="control-panel">\n\t\t\t\t\t<button id="admin-logout" type="button">Odhlášení</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</header>\n\n\t<main class="container">\n\t\t<div id="admin-welcome-text">\n\t\t\t<div class="admin-welcome-text-preloader">preloader</div>\n\t\t</div>\n\n\t\t<div id="admin-position">\n\t\t\t<div class="admin-position-preloader">preloader</div>\n\t\t</div>\n\n\t\t<div id="admin-news">\n\t\t\t<div class="admin-news-preloader">preloader</div>\n\t\t</div>\n\t</main>\n\n\t<footer></footer>\n\t';
 	};
 	
-	var createNewsModalContent = exports.createNewsModalContent = function createNewsModalContent(_ref) {
+	var newsModalContent = exports.newsModalContent = function newsModalContent(_ref) {
 		var _ref$modalHeader = _ref.modalHeader;
 		var modalHeader = _ref$modalHeader === undefined ? 'Vytvoření novinky' : _ref$modalHeader;
 		var _ref$header = _ref.header;
@@ -196,8 +196,10 @@
 		var annotation = _ref$annotation === undefined ? 'Anotace' : _ref$annotation;
 		var _ref$content = _ref.content;
 		var content = _ref$content === undefined ? 'Obsah' : _ref$content;
+		var _ref$submit = _ref.submit;
+		var submit = _ref$submit === undefined ? 'Vytvořit novinku' : _ref$submit;
 	
-		var template = '\n\t\t<div class="modal-window-header">\n\t\t\t<h2>' + modalHeader + '</h2>\n\t\t</div>\n\n\t\t<div class="modal-window-content">\n\t\t\t<input data-type="header" value="' + header + '">\n\t\t\t<input data-type="date" value="' + date + '">\n\t\t\t<input data-type="lat" value="' + lat + '">\n\t\t\t<input data-type="lng" value="' + lng + '">\n\t\t\t<input data-type="desc" value="' + annotation + '">\n\t\t\t<input data-type="content" value="' + content + '">\n\t\t</div>\n\n\t\t<div class="modal-window-footer">\n\t\t\t<button id="create-new-story" class="waves-effect waves-light btn" type="button">Vytvořit novinku</button>\n\t\t</div>\n\t';
+		var template = '\n\t\t<div class="modal-window-header">\n\t\t\t<h2>' + modalHeader + '</h2>\n\t\t</div>\n\n\t\t<div class="modal-window-content">\n\t\t\t<input data-type="header" value="' + header + '">\n\t\t\t<input data-type="date" value="' + date + '">\n\t\t\t<input data-type="lat" value="' + lat + '">\n\t\t\t<input data-type="lng" value="' + lng + '">\n\t\t\t<input data-type="desc" value="' + annotation + '">\n\t\t\t<input data-type="content" value="' + content + '">\n\t\t</div>\n\n\t\t<div class="modal-window-footer">\n\t\t\t<button id="news-modal-submit" class="waves-effect waves-light btn" type="button">' + submit + '</button>\n\t\t</div>\n\t';
 	
 		return template;
 	};
@@ -214,17 +216,17 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.getPosition = exports.getWelcomeText = exports.deleteSingleNewItem = exports.updateSingleNewsItem = exports.getSingleNewItem = exports.getNews = exports.createNewsItem = exports.setStorageReference = exports.setDBreference = exports.setUserState = exports.setFirebaseAuth = exports.storage = exports.user = exports.db = undefined;
+	exports.getPosition = exports.getWelcomeText = exports.deleteSingleNewItem = exports.updateSingleNewsItem = exports.getSingleNewItem = exports.getNews = exports.editNewsItem = exports.createNewsItem = exports.setStorageReference = exports.setDBreference = exports.setUserState = exports.setFirebaseAuth = exports.storage = exports.user = exports.db = undefined;
 	
 	var _formLogin = __webpack_require__(5);
 	
 	var _administration = __webpack_require__(6);
 	
-	var _index = __webpack_require__(11);
+	var _index = __webpack_require__(12);
 	
-	var _index2 = __webpack_require__(13);
+	var _index2 = __webpack_require__(14);
 	
-	var _index3 = __webpack_require__(14);
+	var _index3 = __webpack_require__(15);
 	
 	var _helpers = __webpack_require__(2);
 	
@@ -275,10 +277,36 @@
 		});
 	};
 	
+	var editNewsItem = exports.editNewsItem = function editNewsItem(opts, item) {
+		db.ref('news/' + item).update(opts, function (error) {
+			console.log('update item:', item);
+			console.log('update options:', opts);
+	
+			var errorMsg = error ? 'Error has occured during saving process' : 'Data has been updated succesfully';
+			console.log(errorMsg);
+	
+			(0, _helpers.removePreloader)();
+		});
+	};
+	
 	var getNews = exports.getNews = function getNews() {
-		db.ref('news').on('value', function (data) {
-			//db.ref('news').off()
-			(0, _index3.renderNewsList)(data.val());
+		db.ref('news').orderByChild('dateStamp').on('value', function (data) {
+			// console.log(data.val())
+	
+			var news = {};
+			var i = 0;
+			data.forEach(function (child) {
+				// console.log(child)
+				news[i] = child.val();
+				news[i]['key'] = child.key;
+				// console.log(child.key)
+				// news[child.val().key]
+				// console.log(child.val()) // NOW THE CHILDREN PRINT IN ORDER
+				i++;
+			});
+			console.log(news);
+	
+			(0, _index3.renderNewsList)(news);
 		});
 	};
 	
@@ -585,8 +613,12 @@
 		modalPostRenderFunctions.globalPostRenderFunction = postRenderFunction;
 		switch (opts.type) {
 			case 'create-news-modal':
-				template = (0, _templates.createNewsModalContent)(content);
+				template = (0, _templates.newsModalContent)(content);
 				modalPostRenderFunctions.createNews = _postRenderFunctions.postRenderFunctions.createNews;
+				break;
+			case 'edit-news-modal':
+				template = (0, _templates.newsModalContent)(content);
+				modalPostRenderFunctions.editNews = _postRenderFunctions.postRenderFunctions.editNews;
 				break;
 			case 'create-news-item-gallery':
 				if (opts.itemKey && typeof opts.itemKey === 'string') {
@@ -653,9 +685,12 @@
 	
 	var _templates = __webpack_require__(3);
 	
+	var _helpers = __webpack_require__(11);
+	
 	var _firebase = __webpack_require__(4);
 	
 	var postRenderFunctions = exports.postRenderFunctions = {
+		editNews: editNews,
 		createNews: createNews,
 		createGallery: createGallery
 	};
@@ -665,16 +700,39 @@
 		var opts = {
 			gallery: {}
 		};
-		$('#create-new-story').on('click', function (e) {
+		$('#news-modal-submit').on('click', function (e) {
 			e.preventDefault();
 	
 			$(_templates.preLoader).appendTo('body');
 	
 			$('.modal-window-content input').each(function (index, item) {
-				opts[$(item).attr('data-type')] = $(item).val();
+				var val = $(item).val();
+	
+				if ($(item).attr('data-type') === 'date') opts['dateStamp'] = -createTimeStamp($(item).val()); // je zaporny kvuli vypisu z firebase
+	
+				opts[$(item).attr('data-type')] = val;
 			});
 	
 			(0, _firebase.createNewsItem)(opts);
+		});
+	}
+	
+	function editNews() {
+		$('#news-modal-submit').on('click', function (e) {
+			e.preventDefault();
+			var opts = {};
+	
+			$(_templates.preLoader).appendTo('body');
+	
+			$('.modal-window-content input').each(function (index, item) {
+				var val = $(item).val();
+	
+				if ($(item).attr('data-type') === 'date') opts['dateStamp'] = -createTimeStamp($(item).val()); // je zaporny kvuli vypisu z firebase
+	
+				opts[$(item).attr('data-type')] = val;
+			});
+	
+			(0, _firebase.editNewsItem)(opts, _helpers.storeNewsItemKey);
 		});
 	}
 	
@@ -708,9 +766,49 @@
 			return false;
 		});
 	}
+	
+	function createTimeStamp(dateFromInput) {
+		var date = new Date(),
+		    currentDate = ('' + dateFromInput).split(".");
+		// currentDate = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`.split("-")
+	
+		return new Date(currentDate[1] + '/' + currentDate[0] + '/' + currentDate[2]).getTime();
+	}
 
 /***/ },
 /* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	// uklada vsechny galerie a jejich itemy do tohoto objektu, ze ktereho potom vytahujeme konkretni galerii, kdyz ji otevirame
+	var galleryStorage = exports.galleryStorage = {};
+	
+	// uklada konkretni galerii do storage
+	var setGallery = exports.setGallery = function setGallery(key, data) {
+		return galleryStorage[key] = data;
+	};
+	
+	// rendruje galerii (vytahne si ji z galleryStorage), vraci blok s obrazky
+	var renderGallery = exports.renderGallery = function renderGallery(itemKey) {
+		var block = '';
+		Object.keys(galleryStorage[itemKey]).forEach(function (key) {
+			block += '\n\t\t\t<div>\n\t\t\t\t' + key + '\n\t\t\t</div>\n\t\t\t<img src="' + galleryStorage[itemKey][key].url + '">';
+		});
+	
+		return block;
+	};
+	
+	var storeNewsItemKey = exports.storeNewsItemKey = '';
+	var setStoreNewsItemKey = exports.setStoreNewsItemKey = function setStoreNewsItemKey(key) {
+		return exports.storeNewsItemKey = storeNewsItemKey = key;
+	};
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -720,7 +818,7 @@
 	});
 	exports.renderWelcomeText = undefined;
 	
-	var _renderUi = __webpack_require__(12);
+	var _renderUi = __webpack_require__(13);
 	
 	var _renderUi2 = _interopRequireDefault(_renderUi);
 	
@@ -742,7 +840,7 @@
 	};
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -767,7 +865,7 @@
 	}
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -777,7 +875,7 @@
 	});
 	exports.renderPosition = undefined;
 	
-	var _renderUi = __webpack_require__(12);
+	var _renderUi = __webpack_require__(13);
 	
 	var _renderUi2 = _interopRequireDefault(_renderUi);
 	
@@ -799,7 +897,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -813,7 +911,7 @@
 	
 	var _firebase = __webpack_require__(4);
 	
-	var _helpers = __webpack_require__(15);
+	var _helpers = __webpack_require__(11);
 	
 	var _actions = __webpack_require__(16);
 	
@@ -833,12 +931,15 @@
 		Object.keys(news).forEach(function (key) {
 			var newsType = news[key].type === 1 ? 'nz' : 'aust';
 	
-			var newPost = '\n\t\t\t<li\n\t\t\t\tclass="admin-news-item"\n\t\t\t\tdata-db-key="' + key + '"\n\t\t\t\tid="admin-news-item-' + news[key].id + '"\n\t\t\t>\n\t\t\t\t<div class="collapsible-header">\n\t\t\t\t\t<img class="admin-news-icon" src="../src/imgs/' + newsType + '-icon.png">\n\t\t\t\t\t<h3>\n\t\t\t\t\t\t' + news[key].header + '\n\t\t\t\t\t</h3>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="admin-news-edit">\n\t\t\t\t\t<button data-type="edit" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">mode_edit</i>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button data-type="delete" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">delete</i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>';
+			var newPost = '\n\t\t\t<li\n\t\t\t\tclass="admin-news-item"\n\t\t\t\tdata-db-key="' + news[key].key + '"\n\t\t\t\tid="admin-news-item-' + news[key].id + '"\n\t\t\t>\n\t\t\t\t<div class="collapsible-header">\n\t\t\t\t\t<img class="admin-news-icon" src="../src/imgs/' + newsType + '-icon.png">\n\t\t\t\t\t<h3>\n\t\t\t\t\t\t' + news[key].header + ' ' + news[key].date + '\n\t\t\t\t\t</h3>\n\t\t\t\t</div>\n\n\t\t\t\t<div class="admin-news-edit">\n\t\t\t\t\t<button data-type="edit" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">mode_edit</i>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button data-type="delete" class="waves-effect waves-light btn" type="button">\n\t\t\t\t\t\t<i class="material-icons">delete</i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>';
 	
-			newPost += '\n\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t<div class="admin-news-item-content">\n\t\t\t\t\t\t' + news[key].desc + '\n\t\t\t\t\t</div>';
+			newPost += '\n\t\t\t\t<div class="collapsible-body">\n\t\t\t\t\t<div class="admin-news-item-content">\n\t\t\t\t\t\t' + news[key].desc + '\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class="admin-news-item-gallery">';
 	
-			if (typeof news[key].gallery === 'undefined') newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\t<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>\n\t\t\t\t\t</div>';else newPost += '\n\t\t\t\t\t<div class="admin-news-item-gallery">\n\t\t\t\t\t\t' + (0, _helpers.renderGallery)(news[key].gallery) + '\n\t\t\t\t\t</div>';
-			newPost += '</div></li>';
+			if (typeof news[key].gallery === 'undefined') newPost += '\n\t\t\t\t\t\t<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>';else {
+				(0, _helpers.setGallery)(news[key].key, news[key].gallery);
+				newPost += '\n\t\t\t\t\t\t<button class="open-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Otevřít galerii</button>';
+			}
+			newPost += '</div></div></li>';
 	
 			$(newPost).appendTo(el);
 		});
@@ -870,24 +971,6 @@
 	};
 
 /***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	var renderGallery = exports.renderGallery = function renderGallery(gallery) {
-		var block = '';
-		Object.keys(gallery).forEach(function (key) {
-			block += '\n\t\t\t<div>\n\t\t\t\t' + key + '\n\t\t\t</div>\n\t\t\t<img src="' + gallery[key].url + '">';
-		});
-	
-		return block;
-	};
-
-/***/ },
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -900,26 +983,30 @@
 	
 	var _modals = __webpack_require__(8);
 	
-	var _index = __webpack_require__(14);
+	var _index = __webpack_require__(15);
 	
-	var _helpers = __webpack_require__(2);
+	var _helpers = __webpack_require__(11);
+	
+	var _helpers2 = __webpack_require__(2);
 	
 	var _firebase = __webpack_require__(4);
 	
 	var actionList = exports.actionList = {
 		deleteItem: deleteItem,
 		editItem: editItem,
-		createGallery: createGallery
+		createGallery: createGallery,
+		openGallery: openGallery
 	};
 	
 	function deleteItem() {
 		$('.admin-news-edit [data-type="delete"]').on('click', function () {
-			(0, _helpers.createPreloader)();
+			(0, _helpers2.createPreloader)();
 	
 			(0, _firebase.deleteSingleNewItem)($(this).closest('.admin-news-item').attr('data-db-key'));
 		});
 	}
 	
+	// modalni okno s vytvorenim nove galerie
 	function createGallery() {
 		$('.create-gallery').on('click', function (e) {
 			e.preventDefault();
@@ -931,14 +1018,30 @@
 		});
 	}
 	
+	// otevre galerii kdyz jiz existuje u novinky
+	function openGallery() {
+		$('.open-gallery').on('click', function (e) {
+			e.preventDefault();
+	
+			var itemKey = $(e.target).closest('.admin-news-item').attr('data-db-key');
+	
+			$((0, _helpers.renderGallery)(itemKey)).appendTo($(e.target).closest('.admin-news-item-gallery'));
+		});
+	}
+	
 	function editItem() {
 		$('.admin-news-edit [data-type="edit"]').on('click', function () {
-			(0, _helpers.createPreloader)();
+			(0, _helpers2.createPreloader)();
+	
+			var itemKey = $(this).closest('.admin-news-item').attr('data-db-key');
+			(0, _helpers.setStoreNewsItemKey)(itemKey);
 	
 			var customFunction = function customFunction(data) {
+				var content = data.val();
+				content.submit = 'Změnit';
 				(0, _modals.openModal)({
-					type: 'create-news-modal'
-				}, data.val());
+					type: 'edit-news-modal'
+				}, content);
 			};
 	
 			var id = $(this).closest('.admin-news-item').attr('data-db-key');

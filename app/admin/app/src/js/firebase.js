@@ -52,10 +52,36 @@ export let createNewsItem = opts => {
 	})
 }
 
+export let editNewsItem = (opts, item) => {
+	db.ref(`news/${item}`).update(opts, function(error) {
+		console.log('update item:', item)
+		console.log('update options:', opts)
+
+		let errorMsg = error ? 'Error has occured during saving process' : 'Data has been updated succesfully'
+	  console.log(errorMsg)
+
+	  removePreloader()
+	})
+}
+
 export let getNews = () => {
-	db.ref('news').on('value', function(data) {
-		//db.ref('news').off()
-		renderNewsList(data.val())
+	db.ref('news').orderByChild('dateStamp').on('value', function(data) {
+		// console.log(data.val())
+
+		let news = {}
+		let i = 0
+		data.forEach(function(child) {
+			// console.log(child)
+			news[i] = child.val()
+			news[i]['key'] = child.key
+			// console.log(child.key)
+		// news[child.val().key]
+				// console.log(child.val()) // NOW THE CHILDREN PRINT IN ORDER
+			i++
+		});
+		console.log(news)
+
+		renderNewsList(news)
 	})
 }
 

@@ -1,6 +1,6 @@
 import { lngs } from '../../../constants'
 import { storage } from '../../../firebase'
-import { renderGallery } from './helpers'
+import { setGallery, galleryStorage } from './helpers'
 import { actionList } from './actions'
 import { callFunctionsInObject, checkAsyncFirebase } from '../../helpers'
 
@@ -21,13 +21,13 @@ export let renderNewsList = data => {
 		let newPost = `
 			<li
 				class="admin-news-item"
-				data-db-key="${key}"
+				data-db-key="${news[key].key}"
 				id="admin-news-item-${news[key].id}"
 			>
 				<div class="collapsible-header">
 					<img class="admin-news-icon" src="../src/imgs/${newsType}-icon.png">
 					<h3>
-						${news[key].header}
+						${news[key].header} ${news[key].date}
 					</h3>
 				</div>
 
@@ -44,19 +44,19 @@ export let renderNewsList = data => {
 				<div class="collapsible-body">
 					<div class="admin-news-item-content">
 						${news[key].desc}
-					</div>`
+					</div>
+
+					<div class="admin-news-item-gallery">`
 
 			if(typeof news[key].gallery === 'undefined')
 				newPost += `
-					<div class="admin-news-item-gallery">
-						<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>
-					</div>`
-			else
+						<button class="create-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Vytvořit galerii</button>`
+			else {
+				setGallery(news[key].key, news[key].gallery)
 				newPost += `
-					<div class="admin-news-item-gallery">
-						${renderGallery(news[key].gallery)}
-					</div>`
-			newPost += `</div></li>`
+						<button class="open-gallery waves-effect waves-light btn" data-type="create-news-item-gallery" type="button">Otevřít galerii</button>`
+			}
+			newPost += `</div></div></li>`
 
 		$(newPost).appendTo(el)
 	})
